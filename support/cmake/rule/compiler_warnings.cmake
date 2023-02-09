@@ -7,28 +7,48 @@ function(
     ENABLE_WARNINGS_AS_ERRORS)
 
     set(MSVC_WARNINGS
-        /W4 # Baseline reasonable warnings
-        /w14242 # 'identifier': conversion from 'type1' to 'type1', possible loss of data
-        /w14254 # 'operator': conversion from 'type1:field_bits' to 'type2:field_bits', possible loss of data
-        /w14263 # 'function': member function does not override any base class virtual member function
-        /w14265 # 'classname': class has virtual functions, but destructor is not virtual instances of this class may not be destructed correctly
-        /w14287 # 'operator': unsigned/negative constant mismatch
-        /we4289 # nonstandard extension used: 'variable': loop control variable declared in the for-loop is used outside the for-loop scope
-        /w14296 # 'operator': expression is always 'boolean_value'
-        /w14311 # 'variable': pointer truncation from 'type1' to 'type2'
-        /w14545 # expression before comma evaluates to a function which is missing an argument list
-        /w14546 # function call before comma missing argument list
-        /w14547 # 'operator': operator before comma has no effect; expected operator with side-effect
-        /w14549 # 'operator': operator before comma has no effect; did you intend 'operator'?
-        /w14555 # expression has no effect; expected expression with side- effect
-        /w14619 # pragma warning: there is no warning number 'number'
-        /w14640 # Enable warning on thread un-safe static member initialization
-        /w14826 # Conversion from 'type1' to 'type_2' is sign-extended. This may cause unexpected runtime behavior.
-        /w14905 # wide string literal cast to 'LPSTR'
-        /w14906 # string literal cast to 'LPWSTR'
-        /w14928 # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
-        /permissive- # standards conformance mode for MSVC compiler.
-    )
+        /utf-8
+        /w14640
+        /w14826
+        /w14619
+        /w14311
+        /w14296
+        /we4289
+        /w14287
+        /w14265
+        /w14263
+        /w14242
+        /w14254
+        /w14165
+        /w44242
+        /w44254
+        /w44263
+        /w34265
+        /w34287
+        /w44296
+        /w44365
+        /w44388
+        /w44464
+        /w14545
+        /w14546
+        /w14547
+        /w14549
+        /w14555
+        /w34619
+        /w34640
+        /w24826
+        /w14905
+        /w14906
+        /w14928
+        /w45038
+        /W4
+        /permissive-
+        /volatile:iso
+        /Zc:preprocessor
+        /Zc:__cplusplus
+        /Zc:externConstexpr
+        /Zc:throwingNew
+        /EHsc)
 
     set(CLANG_WARNINGS
         -Wall
@@ -39,7 +59,7 @@ function(
         -Wold-style-cast # warn for c-style casts
         -Wcast-align # warn for potential performance problem casts
         -Wunused # warn on anything being unused
-        # -Woverloaded-virtual # warn if you overload (not override) a virtual function
+        -Woverloaded-virtual # warn if you overload (not override) a virtual function
         -Wpedantic # warn if non-standard C++ is used
         -Wconversion # warn on type conversions that may lose data
         -Wsign-conversion # warn on sign conversions
@@ -47,7 +67,10 @@ function(
         -Wdouble-promotion # warn if float is implicit promoted to double
         -Wformat=2 # warn on security issues around functions that format output (ie printf)
         -Wimplicit-fallthrough # warn on statements that fallthrough without an explicit annotation
-    )
+        -Wextra-semi
+        -Werror=float-equal
+        -Wundef
+        -Wcast-qual)
 
     set(GCC_WARNINGS
         ${CLANG_WARNINGS}
@@ -59,7 +82,8 @@ function(
     )
 
     if(ENABLE_WARNINGS_AS_ERRORS)
-        if(NOT APPLE) # some warnings still remaining on Mac
+        if(NOT
+           APPLE) # some warnings still remaining on Mac
             message(
                 TRACE
                 "Warnings are treated as errors")
@@ -75,7 +99,9 @@ function(
                 APPEND
                 MSVC_WARNINGS
                 /WX)
-        endif(NOT APPLE)
+        endif(
+            NOT
+            APPLE)
     endif()
 
     if(MSVC)

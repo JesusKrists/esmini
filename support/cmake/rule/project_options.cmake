@@ -5,12 +5,13 @@ set(CMAKE_CXX_STANDARD
 set(CMAKE_CXX_STANDARD_REQUIRED
     ON)
 set(CMAKE_CXX_EXTENSIONS
-    ON)
+    OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS
     ON)
 set(CMAKE_VERBOSE_MAKEFILE
     ON)
-set(EXPLICIT_FOLDER_STRUCTURE ON)
+set(EXPLICIT_FOLDER_STRUCTURE
+    ON)
 
 # ---------------------------------------------------
 if(MSVC)
@@ -49,7 +50,9 @@ target_compile_features(
     INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 
 include(${CMAKE_CURRENT_LIST_DIR}/compiler_warnings.cmake)
-set_project_warnings( project_options ${ENABLE_WARNINGS_AS_ERRORS})
+set_project_warnings(
+    project_options
+    ${ENABLE_WARNINGS_AS_ERRORS})
 
 include(${CMAKE_CURRENT_LIST_DIR}/ccache.cmake)
 if(ENABLE_CCACHE)

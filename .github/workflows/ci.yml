@@ -28,7 +28,10 @@ jobs:
 
     - uses: seanmiddleditch/gha-setup-ninja@v3
     - uses: jwlawson/actions-setup-cmake@v1.13.1
-    - run: sudo apt install -y -q gcc-7 g++-7
+    
+    - name: Install GCC-7 
+      run: sudo apt-get update -q
+        && sudo apt-get install -y -q gcc-7 g++-7
 
     - name: Install clang-tidy-17
       env:

@@ -79,7 +79,7 @@ jobs:
         && cmake --version
 
     - name: Output Windows tools versions
-      if: matrix.os == 'macos-latest'
+      if: matrix.os == 'windows-latest'
       run: cl
         && pip --version
         && ninja --version

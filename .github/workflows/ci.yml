@@ -13,7 +13,11 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, macos-latest, windows-latest]
+        
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
@@ -28,7 +32,12 @@ jobs:
     - uses: seanmiddleditch/gha-setup-ninja@v3
     - uses: jwlawson/actions-setup-cmake@v1.13.1
 
-    - name: Install clang-tidy-17
+    - name: Setup VS Dev Environment - Windows
+      if: matrix.os == 'windows-latest'
+      uses: seanmiddleditch/gha-setup-vsdevenv@v4
+
+    - name: Install clang-tidy-17 - Ubuntu
+      if: matrix.os == 'ubuntu-18.04'
       env:
         LLVM_URL: http://apt.llvm.org/bionic/
         LLVM_PKG: llvm-toolchain-bionic
@@ -38,7 +47,8 @@ jobs:
         && sudo apt-get install -y -q clang-tidy-17
         && sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-17 200
 
-    - name: Build cppcheck 2.10
+    - name: Build cppcheck 2.10 - Ubuntu
+      if: matrix.os == 'ubuntu-18.04'
       env:
         CPPCHECK_BUILD: /home/cppcheck/build
         CPPCHECK_SRC: /home/cppcheck/cppcheck-src
@@ -50,7 +60,8 @@ jobs:
         && cmake --build ${{ env.CPPCHECK_BUILD }} -j
         && sudo cmake --install ${{ env.CPPCHECK_BUILD }}
 
-    - name: Output tool versions
+    - name: Output Ubuntu tools versions
+      if: matrix.os == 'ubuntu-18.04'
       run: gcc --version
         && clang --version
         && gcc-7 --version
@@ -59,3 +70,17 @@ jobs:
         && cmake --version
         && clang-tidy --version
         && cppcheck --version
+
+    - name: Output MacOS tools versions
+      if: matrix.os == 'macos-latest'
+      run: clang --version
+        && pip --version
+        && ninja --version
+        && cmake --version
+
+    - name: Output Windows tools versions
+      if: matrix.os == 'macos-latest'
+      run: cl
+        && pip --version
+        && ninja --version
+        && cmake --version

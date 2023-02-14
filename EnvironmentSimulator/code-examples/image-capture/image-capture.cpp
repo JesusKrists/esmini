@@ -75,8 +75,8 @@ int main(int argc, char* argv[])
   // created and fetched while next scenario frame is already being processed
   // When image callback has been registered, images will be transfered to RAM during rendering
   // I.e. no need for SE_SaveImagesToRAM(true);
-  SE_RegisterImageCallback(img_callback, 0);                        // Must be before SE_Init
-  SE_SetWindowPosAndSize(60, 60, 600, 300);                         // Try another image size
+  SE_RegisterImageCallback(img_callback, 0);  // Must be before SE_Init
+  SE_SetWindowPosAndSize(60, 60, 600, 300);   // Try another image size
 
   SE_Init("../resources/xosc/lane_change_crest.xosc", 0, 1, 0, 0);  // 1 = viewer
 

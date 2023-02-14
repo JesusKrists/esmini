@@ -44,7 +44,7 @@ namespace roadmanager
    public:
     bool operator()(Node *a, Node *b)  // overloading both operators
     {
-      if (a->weight == b->weight)      // sort after lanes if weight is same.
+      if (a->weight == b->weight)  // sort after lanes if weight is same.
       {
         // Changes lane as soon as possible:
         int aAbs = abs(a->currentLaneId - a->previous->currentLaneId);

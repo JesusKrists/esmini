@@ -847,10 +847,10 @@ int Object::FreeSpaceDistanceObjectRoadLane(Object* target, double* latDist, dou
   double       minDT = LARGE_NUMBER;
   PositionDiff posDiff;
 
-  double ds[4][4];               // delta s between every vertex on first bb to every vertex on second bb
-  double dt[4][4];               // delta t between every vertex on first bb to every vertex on second bb
+  double ds[4][4];  // delta s between every vertex on first bb to every vertex on second bb
+  double dt[4][4];  // delta t between every vertex on first bb to every vertex on second bb
 
-  for (int i = 0; i < 4; i++)    // for each vertex of first BBs
+  for (int i = 0; i < 4; i++)  // for each vertex of first BBs
   {
     for (int j = 0; j < 4; j++)  // for each vertex of second BBs
     {

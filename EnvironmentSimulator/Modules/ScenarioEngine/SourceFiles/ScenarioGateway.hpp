@@ -37,8 +37,8 @@ namespace scenarioengine
     double         wheel_rot;        // Only used for vehicle
     double         rear_axle_z_pos;  // z coordinate of the middle of rear axle under neutral load conditions
     OSCBoundingBox boundingbox;
-    int            scaleMode;        // 0=None, 1=BoundingBoxToModel, 2=ModelToBoundingBox (see enum EntityScaleMode)
-    int            visibilityMask;   // bitmask according to Object::Visibility (1 = Graphics, 2 = Traffic, 4 = Sensors)
+    int            scaleMode;       // 0=None, 1=BoundingBoxToModel, 2=ModelToBoundingBox (see enum EntityScaleMode)
+    int            visibilityMask;  // bitmask according to Object::Visibility (1 = Graphics, 2 = Traffic, 4 = Sensors)
   };
 
   struct ObjectStateStruct
@@ -57,8 +57,8 @@ namespace scenarioengine
     float          timeStamp;
     char           name[NAME_LEN];
     float          speed;
-    float          wheel_angle;     // Only used for vehicle
-    float          wheel_rot;       // Only used for vehicle
+    float          wheel_angle;  // Only used for vehicle
+    float          wheel_rot;    // Only used for vehicle
     OSCBoundingBox boundingbox;
     int            scaleMode;       // 0=None, 1=BoundingBoxToModel, 2=ModelToBoundingBox (see enum EntityScaleMode)
     int            visibilityMask;  // bitmask according to Object::Visibility (1 = Graphics, 2 = Traffic, 4 = Sensors)

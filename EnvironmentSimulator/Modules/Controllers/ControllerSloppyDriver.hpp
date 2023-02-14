@@ -99,7 +99,7 @@ namespace scenarioengine
     double             referenceSpeed_;  // set by default driver
     double             initSpeed_;       // start speed for each timer period
     double             currentSpeed_;
-    double             targetFactor_;    // factor to multiply reference speed
+    double             targetFactor_;  // factor to multiply reference speed
 
     SE_SimulationTimer lateralTimer_;
     double             lateralTimerAverage_;

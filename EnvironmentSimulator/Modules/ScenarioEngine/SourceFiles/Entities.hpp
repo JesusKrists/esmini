@@ -136,7 +136,7 @@ namespace scenarioengine
     double      end_of_road_timestamp_;
     double      off_road_timestamp_;
     double      stand_still_timestamp_;
-    bool        reset_;                                       // indicate discreet movement, teleporting, no odometer update
+    bool        reset_;  // indicate discreet movement, teleporting, no odometer update
 
     Controller*                                 controller_;  // reference to any assigned controller object
     double                                      headstart_time_;

@@ -564,7 +564,7 @@ int main(int argc, char **argv)
         now           = SE_getSystemTime();
         deltaSimTime  = static_cast<double>(now - lastTimeStamp) / 1000.0;  // step size in seconds
         lastTimeStamp = now;
-        if (deltaSimTime > maxStepSize)                                     // limit step size
+        if (deltaSimTime > maxStepSize)  // limit step size
         {
           deltaSimTime = maxStepSize;
         }

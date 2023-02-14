@@ -124,8 +124,8 @@ typedef struct
 
 typedef struct
 {
-  bool active;      // True: override; false: stop overriding
-  int  type;        // According to Entities::OverrideType
+  bool active;  // True: override; false: stop overriding
+  int  type;    // According to Entities::OverrideType
   int  number;
   int  value_type;  // According to Entities::OverrideGearType
                     // Manual type: Negative number are indicating reverse gears. Zero is neutral gear.
@@ -197,7 +197,7 @@ typedef struct
   int            pixelSize;    // 3 for RGB/BGR
   int            pixelFormat;  // 0x1907=RGB (GL_RGB), 0x80E0=BGR (GL_BGR)
   unsigned char *data;
-} SE_Image;                    // Should be synked with CommonMini/OffScreenImage
+} SE_Image;  // Should be synked with CommonMini/OffScreenImage
 
 #ifdef __cplusplus
 extern "C"

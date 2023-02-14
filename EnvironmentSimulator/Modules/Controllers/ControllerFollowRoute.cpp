@@ -257,7 +257,7 @@ void ControllerFollowRoute::ChangeLane(double timeStep)
 
     mode_ = Mode::MODE_OVERRIDE;  // override mode to prevent default controller from moving the entity
 
-                                  // skip step at this timestep since default controller already update the entity
+    // skip step at this timestep since default controller already update the entity
   }
   else
   {

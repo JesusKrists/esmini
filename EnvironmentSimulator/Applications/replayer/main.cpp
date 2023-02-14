@@ -219,7 +219,7 @@ int ParseEntities(viewer::Viewer* viewer, Replay* player)
     odo_entry.x  = state->pos.x;
     odo_entry.y  = state->pos.y;
     odo_entry.odometer += delta;
-    odo_info[sc->id] = odo_entry;          // save updated odo info for next calculation
+    odo_info[sc->id] = odo_entry;  // save updated odo info for next calculation
 
     entry->odometer = odo_entry.odometer;  // update odometer
   }
@@ -853,7 +853,7 @@ int main(int argc, char** argv)
           now           = SE_getSystemTime();
           deltaSimTime  = static_cast<double>(now - lastTimeStamp) / 1000.0;  // step size in seconds
           lastTimeStamp = now;
-          if (deltaSimTime > maxStepSize)                                     // limit step size
+          if (deltaSimTime > maxStepSize)  // limit step size
           {
             deltaSimTime = maxStepSize;
           }

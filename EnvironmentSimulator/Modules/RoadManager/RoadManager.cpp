@@ -6910,9 +6910,9 @@ Position::ReturnCode Position::XYZH2TrackPos(double x3, double y3, double z3, do
       }
     }
 
-    XYZHVertex v[3];                          // circular buffer for osi points and additional info
-    int        l0 = -1, l1 = -2, l2 = -3;     // circular buffer indices
-    int        counter   = 0;                 // only for potential first (i==-2) limited search round
+    XYZHVertex v[3];                       // circular buffer for osi points and additional info
+    int        l0 = -1, l1 = -2, l2 = -3;  // circular buffer indices
+    int        counter   = 0;              // only for potential first (i==-2) limited search round
     double     s_norm    = -1.0;
     int        jMinLocal = startLaneSecIdx;   // keep track of "best" lane section candidate
     int        kMinLocal = startOSIPointIdx;  // keep track of "best" osi point candidate (on given lane section)

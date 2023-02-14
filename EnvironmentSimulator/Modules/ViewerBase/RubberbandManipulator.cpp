@@ -416,7 +416,7 @@ bool RubberbandManipulator::calcMovement(double dt, bool reset)
                        static_cast<float>(M_PI_2) - cam_rot[0],
                        osg::Vec3(osg::Y_AXIS),  // rotate so that X is forward and apply heading
                        cam_rot[1],
-                       osg::Vec3(osg::X_AXIS)   // apply pitch
+                       osg::Vec3(osg::X_AXIS)  // apply pitch
         );
 
         osg::Matrix localRotation;

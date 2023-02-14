@@ -53,7 +53,7 @@ namespace scenarioengine
       USER_CONTROLLER_TYPE_BASE = 1000,
     };
 
-    enum                  // copy key enums from OSG GUIEventAdapter
+    enum  // copy key enums from OSG GUIEventAdapter
     {
       KEY_Left  = 0xFF51, /* Left arrow */
       KEY_Up    = 0xFF52, /* Up arrow */

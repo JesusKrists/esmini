@@ -343,7 +343,7 @@ TEST(GetOSIRoadLaneTest, lane_no_obj)
   ASSERT_EQ(stat("gt.osi", &fileStatus), 0);
   EXPECT_EQ(fileStatus.st_size, 72195);  // slight growth due to only dynamic updates
 
-  SE_StepDT(0.001f);                     // Step for write another frame to osi file
+  SE_StepDT(0.001f);  // Step for write another frame to osi file
   SE_FlushOSIFile();
   ASSERT_EQ(stat("gt.osi", &fileStatus), 0);
   EXPECT_EQ(fileStatus.st_size, 72695);  // slight growth due to only dynamic updates
@@ -3193,7 +3193,7 @@ TEST(APITest, TestFetchImage)
   EXPECT_NEAR(image.data[pixelNr * image.pixelSize + 1], 81, max_pixel_deviation);  // G
   EXPECT_NEAR(image.data[pixelNr * image.pixelSize + 0], 42, max_pixel_deviation);  // B
 
-  SE_StepDT(0.1f);                                                                  // And another one
+  SE_StepDT(0.1f);  // And another one
 
   SE_FetchImage(&image);
   SE_WritePPM("offscreen2.ppm", image.width, image.height, image.data, image.pixelSize, image.pixelFormat, true);

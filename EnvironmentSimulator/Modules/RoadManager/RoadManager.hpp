@@ -975,7 +975,7 @@ namespace roadmanager
     int                         global_id_;        // Unique ID for OSI
     int                         osiintersection_;  // flag to see if the lane is part of an osi-lane section or not
     LaneType                    type_;
-    int                         level_;            // boolean, true = keep lane on level
+    int                         level_;  // boolean, true = keep lane on level
     std::vector<LaneLink *>     link_;
     std::vector<LaneWidth *>    lane_width_;
     std::vector<LaneRoadMark *> lane_roadMark_;
@@ -3600,12 +3600,12 @@ namespace roadmanager
     double     s_trajectory_;  // longitudinal point/distance along the trajectory
     double     t_trajectory_;  // longitudinal point/distance along the trajectory
     double     curvature_;
-    double     p_relative_;    // pitch relative to the road (h_ = h_road_ + h_relative_)
-    double     r_relative_;    // roll relative to the road (h_ = h_road_ + h_relative_)
-    ALIGN_MODE align_h_;       // Align to road: None, Soft or Hard
-    ALIGN_MODE align_p_;       // Align to road: None, Soft or Hard
-    ALIGN_MODE align_r_;       // Align to road: None, Soft or Hard
-    ALIGN_MODE align_z_;       // Align elevation (Z) to road: None, Soft or Hard
+    double     p_relative_;  // pitch relative to the road (h_ = h_road_ + h_relative_)
+    double     r_relative_;  // roll relative to the road (h_ = h_road_ + h_relative_)
+    ALIGN_MODE align_h_;     // Align to road: None, Soft or Hard
+    ALIGN_MODE align_p_;     // Align to road: None, Soft or Hard
+    ALIGN_MODE align_r_;     // Align to road: None, Soft or Hard
+    ALIGN_MODE align_z_;     // Align elevation (Z) to road: None, Soft or Hard
 
     Position       *rel_pos_;
     PositionType    type_;
@@ -3657,7 +3657,7 @@ namespace roadmanager
     // Store roads overlapping position, updated by XYZH2TrackPos()
     std::vector<int> overlapping_roads;  // road ids overlapping position evaluated by XYZH2TrackPos()
 
-    int orientationSetMask;              // use values from OrientationSetMask
+    int orientationSetMask;  // use values from OrientationSetMask
   };
 
   // A route is a sequence of positions, at least one per road along the route

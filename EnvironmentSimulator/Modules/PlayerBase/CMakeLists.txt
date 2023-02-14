@@ -32,21 +32,20 @@ add_library(
 
 target_include_directories(
     ${TARGET}
-    PRIVATE
-    project_options
-    ${SCENARIO_ENGINE_PATH}/SourceFiles
-    ${SCENARIO_ENGINE_PATH}/OSCTypeDefs
-    ${COMMON_MINI_PATH}
-    ${VIEWER_BASE_PATH}
-    ${CONTROLLERS_PATH})
+    PRIVATE project_options
+            ${SCENARIO_ENGINE_PATH}/SourceFiles
+            ${SCENARIO_ENGINE_PATH}/OSCTypeDefs
+            ${COMMON_MINI_PATH}
+            ${VIEWER_BASE_PATH}
+            ${CONTROLLERS_PATH})
 
 target_include_directories(
     ${TARGET}
-    SYSTEM PUBLIC
-    ${ROAD_MANAGER_PATH}
-    ${EXTERNALS_OSG_INCLUDES}
-    ${EXTERNALS_OSI_INCLUDES}
-    ${EXTERNALS_PUGIXML_PATH})
+    SYSTEM
+    PUBLIC ${ROAD_MANAGER_PATH}
+           ${EXTERNALS_OSG_INCLUDES}
+           ${EXTERNALS_OSI_INCLUDES}
+           ${EXTERNALS_PUGIXML_PATH})
 
 disable_static_analysis(${TARGET})
 disable_iwyu(${TARGET})

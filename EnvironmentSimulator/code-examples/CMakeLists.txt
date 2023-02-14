@@ -1,5 +1,4 @@
 
-
 # ############################### Getting code-examples ################################################################
 
 get_subdirectories(
@@ -28,9 +27,14 @@ foreach(
        STREQUAL
        "trig_lane_change")
         add_subdirectory(${subdir})
-        if (NOT ${subdir} STREQUAL "hello_world")
+        if(NOT
+           ${subdir}
+           STREQUAL
+           "hello_world")
             # Add all code examples to the same folder
-            set_folder( ${subdir} ${CodeExamplesFolder} )
-        endif ()
+            set_folder(
+                ${subdir}
+                ${CodeExamplesFolder})
+        endif()
     endif()
 endforeach()

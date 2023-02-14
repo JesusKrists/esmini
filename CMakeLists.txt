@@ -68,9 +68,8 @@ set(DYN_PROTOBUF
 
 if(WIN32)
     cmake_minimum_required(
-        VERSION 3.7.1   # for cmake generator VisualStudio 2017 support
-        # VERSION 3.14   # for cmake generator VisualStudio 2019 support
-        # VERSION 3.19   # for cmake presets support
+        VERSION 3.7.1 # for cmake generator VisualStudio 2017 support
+        # VERSION 3.14   # for cmake generator VisualStudio 2019 support VERSION 3.19   # for cmake presets support
         FATAL_ERROR)
 else()
     cmake_minimum_required(

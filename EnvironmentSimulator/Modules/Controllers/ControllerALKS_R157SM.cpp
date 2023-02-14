@@ -813,17 +813,17 @@ bool ControllerALKS_R157SM::ReferenceDriver::CheckSafety(ObjectInfo* info)
       return false;  // always consider pedestrians moving laterally towards ego
     }
   }
-  else if (info->dLaneId == 0)                                                     // same lane
+  else if (info->dLaneId == 0)  // same lane
   {
     if (abs(c_lane_offset_) > wandering_threshold_ && info->dv_t < -SMALL_NUMBER)  // moving away from ego
     {
-      info->action = ScenarioType::CutOut;                                         // indicate that car is potentially moving out of own lane
+      info->action = ScenarioType::CutOut;  // indicate that car is potentially moving out of own lane
     }
     else if (-SIGN(info->obj->pos_.GetLaneId()) * info->obj->pos_.GetAccS() < -5.0 + SMALL_NUMBER)
     {
       info->action = ScenarioType::Deceleration;  // vehicle is decelerating
     }
-    return false;                                 // car is in own lane, so far
+    return false;  // car is in own lane, so far
   }
   else
   {
@@ -1495,7 +1495,7 @@ double ControllerALKS_R157SM::FSM::ReactCritical()
 {
   if (rt_counter_ > 0.0)
   {
-    acc_ = MIN(acc_, 0.0);                 // release gas pedal
+    acc_ = MIN(acc_, 0.0);  // release gas pedal
     rt_counter_ -= dt_;
     return veh_->GetSpeed() + acc_ * dt_;  // no reaction yet
   }

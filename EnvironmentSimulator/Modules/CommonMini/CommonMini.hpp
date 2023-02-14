@@ -60,28 +60,28 @@ typedef int64_t __int64;
 #define DAT_FILENAME                  "sim.dat"
 #define GHOST_TRAIL_SAMPLE_TIME       0.2
 
-#define LOG(format_, ...)       Logger::Inst().Log(false, false, __FILENAME__, __FUNCTION__, __LINE__, format_, ##__VA_ARGS__)
-#define LOG_TRACE(format_, ...) Logger::Inst().Log(false, true, __FILENAME__, __FUNCTION__, __LINE__, format_, ##__VA_ARGS__)
-#define LOG_ONCE(format_, ...)                                                                        \
-  {                                                                                                   \
-    static bool firstTime = true;                                                                     \
-    if (firstTime)                                                                                    \
-    {                                                                                                 \
-      Logger::Inst().Log(false, false, __FILENAME__, __FUNCTION__, __LINE__, format_, ##__VA_ARGS__); \
-      firstTime = false;                                                                              \
-    }                                                                                                 \
+#define LOG(...)       Logger::Inst().Log(false, false, __FILENAME__, __FUNCTION__, __LINE__, __VA_ARGS__)
+#define LOG_TRACE(...) Logger::Inst().Log(false, true, __FILENAME__, __FUNCTION__, __LINE__, __VA_ARGS__)
+#define LOG_ONCE(...)                                                                      \
+  {                                                                                        \
+    static bool firstTime = true;                                                          \
+    if (firstTime)                                                                         \
+    {                                                                                      \
+      Logger::Inst().Log(false, false, __FILENAME__, __FUNCTION__, __LINE__, __VA_ARGS__); \
+      firstTime = false;                                                                   \
+    }                                                                                      \
   }
-#define LOG_TRACE_ONCE(format_, ...)                                                                 \
-  {                                                                                                  \
-    static bool firstTime = true;                                                                    \
-    if (firstTime)                                                                                   \
-    {                                                                                                \
-      Logger::Inst().Log(false, true, __FILENAME__, __FUNCTION__, __LINE__, format_, ##__VA_ARGS__); \
-      firstTime = false;                                                                             \
-    }                                                                                                \
+#define LOG_TRACE_ONCE(...)                                                               \
+  {                                                                                       \
+    static bool firstTime = true;                                                         \
+    if (firstTime)                                                                        \
+    {                                                                                     \
+      Logger::Inst().Log(false, true, __FILENAME__, __FUNCTION__, __LINE__, __VA_ARGS__); \
+      firstTime = false;                                                                  \
+    }                                                                                     \
   }
-#define LOG_AND_QUIT(format_, ...)       Logger::Inst().Log(true, false, __FILENAME__, __FUNCTION__, __LINE__, format_, ##__VA_ARGS__)
-#define LOG_TRACE_AND_QUIT(format_, ...) Logger::Inst().Log(true, true, __FILENAME__, __FUNCTION__, __LINE__, format_, ##__VA_ARGS__)
+#define LOG_AND_QUIT(...)       Logger::Inst().Log(true, false, __FILENAME__, __FUNCTION__, __LINE__, __VA_ARGS__)
+#define LOG_TRACE_AND_QUIT(...) Logger::Inst().Log(true, true, __FILENAME__, __FUNCTION__, __LINE__, __VA_ARGS__)
 
 // Time functions
 __int64 SE_getSystemTime();
@@ -89,7 +89,7 @@ void    SE_sleep(unsigned int msec);
 double  SE_getSimTimeStep(__int64& time_stamp, double min_time_step, double max_time_step);
 
 // Useful types
-enum class KeyType  // copy key enums from OSG GUIEventAdapter
+enum class KeyType     // copy key enums from OSG GUIEventAdapter
 {
   KEY_Left   = 0xFF51, /* Left arrow */
   KEY_Up     = 0xFF52, /* Up arrow */
@@ -617,7 +617,7 @@ class SE_Semaphore
     std::unique_lock<std::mutex> lock(mtx);
     if (flag == true)
     {
-       cv.wait(lock);  // wait on the mutex until notify is called
+      cv.wait(lock);  // wait on the mutex until notify is called
     }
 #endif
   }

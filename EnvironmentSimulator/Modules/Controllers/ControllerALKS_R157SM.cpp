@@ -30,6 +30,18 @@ using namespace scenarioengine;
     }                                                                                          \
   }
 
+#define R157_LOG_ARGLESS(level, format)                                         \
+  {                                                                             \
+    if (level > 0 && level <= GetLogLevel())                                    \
+    {                                                                           \
+      LOG((std::string("ALKS R157 ") + GetModelName() + " " + format).c_str()); \
+    }                                                                           \
+    else                                                                        \
+    {                                                                           \
+      (void)0;                                                                  \
+    }                                                                           \
+  }
+
 std::map<ControllerALKS_R157SM::ScenarioType, std::string> ControllerALKS_R157SM::ScenarioTypeName = {
     {ControllerALKS_R157SM::ScenarioType::None, "None"},
     {ControllerALKS_R157SM::ScenarioType::CutIn, "CutIn"},
@@ -246,7 +258,7 @@ int ControllerALKS_R157SM::Model::Detect()
 
   if (entities_ == 0)
   {
-    R157_LOG(1, "No entities! Register scenarioengine - SetScenarioEngine()");
+    R157_LOG_ARGLESS(1, "No entities! Register scenarioengine - SetScenarioEngine()");
     return -1;
   }
 
@@ -801,17 +813,17 @@ bool ControllerALKS_R157SM::ReferenceDriver::CheckSafety(ObjectInfo* info)
       return false;  // always consider pedestrians moving laterally towards ego
     }
   }
-  else if (info->dLaneId == 0)  // same lane
+  else if (info->dLaneId == 0)                                                     // same lane
   {
     if (abs(c_lane_offset_) > wandering_threshold_ && info->dv_t < -SMALL_NUMBER)  // moving away from ego
     {
-      info->action = ScenarioType::CutOut;  // indicate that car is potentially moving out of own lane
+      info->action = ScenarioType::CutOut;                                         // indicate that car is potentially moving out of own lane
     }
     else if (-SIGN(info->obj->pos_.GetLaneId()) * info->obj->pos_.GetAccS() < -5.0 + SMALL_NUMBER)
     {
       info->action = ScenarioType::Deceleration;  // vehicle is decelerating
     }
-    return false;  // car is in own lane, so far
+    return false;                                 // car is in own lane, so far
   }
   else
   {
@@ -896,7 +908,7 @@ bool ControllerALKS_R157SM::ReferenceDriver::CheckPerceptionCutIn()
       {
         if (object_in_focus_.obj == nullptr)
         {
-          R157_LOG(3, "In perceive phase, but lost object in focus");
+          R157_LOG_ARGLESS(3, "In perceive phase, but lost object in focus");
         }
         else if (object_in_focus_.obj->pos_.GetT() > veh_->pos_.GetT() &&  // target moving along negative T
                  object_in_focus_.obj->pos_.GetT() < perception_t_ - perception_dist_)
@@ -1483,7 +1495,7 @@ double ControllerALKS_R157SM::FSM::ReactCritical()
 {
   if (rt_counter_ > 0.0)
   {
-    acc_ = MIN(acc_, 0.0);  // release gas pedal
+    acc_ = MIN(acc_, 0.0);                 // release gas pedal
     rt_counter_ -= dt_;
     return veh_->GetSpeed() + acc_ * dt_;  // no reaction yet
   }

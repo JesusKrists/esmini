@@ -12,6 +12,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <cmath>
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -256,7 +257,7 @@ double GetAngleInInterval2PI(double angle)
   {
     angle2 += 2 * M_PI;
   }
-  else if (angle2 == -0)
+  else if (std::signbit(angle2))
   {
     angle2 = 0;
   }
@@ -648,7 +649,7 @@ double SE_getSimTimeStep(__int64& time_stamp, double min_time_step, double max_t
   {
     dt = static_cast<double>(now - time_stamp) * 0.001;  // step size in seconds
 
-    if (dt > max_time_step)  // limit step size
+    if (dt > max_time_step)                              // limit step size
     {
       dt = max_time_step;
     }

@@ -9,7 +9,6 @@ name: Continuous Integration
 
 # Maybe improve to cmake template file?
 #echo "const char* ESMINI_BUILD_VERSION=`"$env:APPVEYOR_BUILD_VERSION`";"  | Out-File -Encoding ascii EnvironmentSimulator/Modules/CommonMini/buildnr.cpp
-        
 
 #if [[ $APPVEYOR_REPO_COMMIT_MESSAGE = *#store_bins* ]] || [ "$APPVEYOR_REPO_TAG" == "true" ]; - Store artifacts if this kind of commit
 
@@ -22,17 +21,16 @@ name: Continuous Integration
 #lipo -create bin/libesminiRMLib.dylib -output bin/esminiRMLib.bundle
 #lipo -create bin/libesminiLib.dylib -output bin/esminiLib.bundle
 
-
 on:
   push:
     branches:
-    - master
-    - dev
+      - master
+      - dev
 
   pull_request:
     branches:
-    - master
-    - dev
+      - master
+      - dev
 
 jobs:
   lint:
@@ -46,8 +44,8 @@ jobs:
       - name: Install Python3.8 and dependencies
         uses: actions/setup-python@v4.5.0
         with:
-          python-version: "3.8"
-          cache: "pip"
+          python-version: '3.8'
+          cache: 'pip'
       - run: pip install -r support/python/requirements.txt
 
       - name: Run clang-format lint
@@ -104,13 +102,13 @@ jobs:
 
       - name: CMake Build
         run: cmake --build build --config ${{ matrix.configuration }} --target install -j 2
-        
+
       - name: Run Tests
         uses: GabrielBB/xvfb-action@v1.6
         with:
           run: ./scripts/run_tests.sh
 
-  test-all-modules:
+  test:
     needs: [lint]
 
     strategy:
@@ -178,7 +176,7 @@ jobs:
         if: runner.os == 'macOS'
         shell: pwsh
         run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-      
+
       - name: CMake Build
         run: cmake --build build --config ${{ matrix.configuration }} --target install -j 2
 
@@ -187,7 +185,7 @@ jobs:
         with:
           run: ./scripts/run_tests.sh
 
-  test-no-modules:
+  test-no-external-modules:
     needs: [lint]
 
     strategy:
@@ -218,7 +216,7 @@ jobs:
       # TODO: We need a way to not fetch existing dependencies because of cached ones. This command currently asks for user input
       #- name: Fetch external dependencies/resources
       #  run: python3 main.py fetch dependency
-      
+
       #- name: Generate OpenDrive interface
       #  run: python3 main.py generate opendrive
 
@@ -249,13 +247,13 @@ jobs:
       - name: CMake Configure - Default
         if: runner.os != 'macOS'
         shell: pwsh
-        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }}
+        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test-no-external-modules" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }}
 
       - name: CMake Configure - macOS
         if: runner.os == 'macOS'
         shell: pwsh
-        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-      
+        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test-no-external-modules" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+
       - name: CMake Build
         run: cmake --build build --config ${{ matrix.configuration }} --target install -j 2
 

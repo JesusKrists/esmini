@@ -29,7 +29,7 @@ runs:
     - name: Install OSG dependencies - Ubuntu
       if: runner.os == 'Linux'
       shell: bash
-      run: sudo apt-get install -y -q libx11-dev libxrandr-dev libxinerama-dev libgles-dev libgl1-mesa-dev libegl-dev libegl1-mesa-dev
+      run: sudo apt-get install -y -q libx11-dev libxrandr-dev libxinerama-dev libgl1-mesa-dev libegl1-mesa-dev
         && sudo apt-get install -y -q libglu1-mesa-dev xorg-dev mesa-utils
 
     - name: Install Mesa3D - Windows

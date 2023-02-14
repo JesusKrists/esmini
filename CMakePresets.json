@@ -22,14 +22,67 @@
       }
     },
     {
+      "name": "disable-osg",
+      "hidden": true,
+      "cacheVariables": {
+        "USE_OSG": "OFF"
+      }
+    },
+    {
+      "name": "disable-osi",
+      "hidden": true,
+      "cacheVariables": {
+        "USE_OSI": "OFF"
+      }
+    },
+    {
+      "name": "disable-sumo",
+      "hidden": true,
+      "cacheVariables": {
+        "USE_SUMO": "OFF"
+      }
+    },
+    {
+      "name": "sanitize-build",
+      "hidden": true,
+      "cacheVariables": {
+        "ENABLE_SANITIZERS": "ON"
+      }
+    },
+    {
+      "name": "test-win_unix",
+      "hidden": true,
+      "cacheVariables": {
+        "ENABLE_WARNINGS_AS_ERRORS": "ON",
+        "ENABLE_STATIC_ANALYSIS": "OFF",
+        "ENABLE_INCLUDE_WHAT_YOU_USE": "OFF"
+      }
+    },
+    {
+      "name": "test-linux",
+      "hidden": true,
+      "cacheVariables": {
+        "ENABLE_WARNINGS_AS_ERRORS": "ON",
+        "ENABLE_STATIC_ANALYSIS": "ON",
+        "ENABLE_INCLUDE_WHAT_YOU_USE": "ON"
+      }
+    },
+    {
       "name": "ci-build",
       "binaryDir": "${sourceDir}/build",
       "hidden": true
     },
     {
-      "name": "ci-win64",
+      "name": "ci-win64-2022",
       "generator": "Visual Studio 17 2022",
       "architecture": "x64",
+      "hidden": true
+    },
+    {
+      "name": "ci-win64-2019",
+      "generator": "Visual Studio 16 2019",
+      "architecture": "x64",
+      "toolset": "v142",
       "hidden": true
     },
     {
@@ -38,10 +91,17 @@
       "hidden": true
     },
     {
-      "name": "ci-windows",
+      "name": "ci-windows-2022",
       "inherits": [
         "ci-build",
-        "ci-win64"
+        "ci-win64-2022"
+      ]
+    },
+    {
+      "name": "ci-windows-2019",
+      "inherits": [
+        "ci-build",
+        "ci-win64-2019"
       ]
     },
     {
@@ -56,6 +116,61 @@
       "inherits": [
         "ci-build",
         "ci-unix"
+      ]
+    },
+    {
+      "name": "ci-sanitize",
+      "inherits": [
+        "ci-ubuntu",
+        "sanitize-build"
+      ]
+    },
+    {
+      "name": "ci-windows-test",
+      "inherits": [
+        "ci-windows-2019",
+        "test-win_unix"
+      ]
+    },
+    {
+      "name": "ci-macos-test",
+      "inherits": [
+        "ci-macos",
+        "test-win_unix"
+      ]
+    },
+    {
+      "name": "ci-ubuntu-test",
+      "inherits": [
+        "ci-ubuntu",
+        "test-linux"
+      ]
+    },
+    {
+      "name": "ci-windows-test-no-modules",
+      "inherits": [
+        "ci-windows-test",
+        "disable-osg",
+        "disable-osi",
+        "disable-sumo"
+      ]
+    },
+    {
+      "name": "ci-macos-test-no-modules",
+      "inherits": [
+        "ci-macos-test",
+        "disable-osg",
+        "disable-osi",
+        "disable-sumo"
+      ]
+    },
+    {
+      "name": "ci-ubuntu-test-no-modules",
+      "inherits": [
+        "ci-ubuntu-test",
+        "disable-osg",
+        "disable-osi",
+        "disable-sumo"
       ]
     }
   ]

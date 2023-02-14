@@ -46,21 +46,21 @@ jobs:
       - name: Install Python3.8 and dependencies
         uses: actions/setup-python@v4.5.0
         with:
-          python-version: "3.10"
+          python-version: "3.8"
           cache: "pip"
       - run: pip install -r support/python/requirements.txt
 
       - name: Run clang-format lint
-        run: python3.8 main.py run format --clang_format_checker
+        run: python3 main.py run format --clang_format_checker
 
       - name: Run cmake-format lint
-        run: python3.8 main.py run format --cmake_format_checker
+        run: python3 main.py run format --cmake_format_checker
 
       - name: Run black-format lint
-        run: python3.8 main.py run format --black_format_checker
+        run: python3 main.py run format --black_format_checker
 
       - name: Run pylint lint
-        run: python3.8 main.py run pylint
+        run: python3 main.py run pylint
 
   sanitize:
     needs: [lint]
@@ -88,6 +88,12 @@ jobs:
             externals/sumo
             resources/models
           key: ${{ runner.os }}-external-resources
+
+      #- name: Fetch external dependencies/resources
+      #  run: python3 main.py fetch dependency
+
+      #- name: Generate OpenDrive interface
+      #  run: python3 main.py generate opendrive
 
       - name: CMake Configure - Default
         if: runner.os != 'macOS'
@@ -129,6 +135,12 @@ jobs:
             externals/sumo
             resources/models
           key: ${{ runner.os }}-external-resources
+
+      #- name: Fetch external dependencies/resources
+      #  run: python3 main.py fetch dependency
+
+      #- name: Generate OpenDrive interface
+      #  run: python3 main.py generate opendrive
 
       - name: Install clang-tidy-15 - Ubuntu
         if: runner.os == 'Linux'
@@ -199,6 +211,12 @@ jobs:
             externals/sumo
             resources/models
           key: ${{ runner.os }}-external-resources
+
+      #- name: Fetch external dependencies/resources
+      #  run: python3 main.py fetch dependency
+      
+      #- name: Generate OpenDrive interface
+      #  run: python3 main.py generate opendrive
 
       - name: Install clang-tidy-15 - Ubuntu
         if: runner.os == 'Linux'

@@ -10,7 +10,8 @@ function(
         DOWNLOAD
         ${url}
         ${target_folder}/${target_filename}
-        STATUS DOWNLOAD_STATUS)
+        STATUS DOWNLOAD_STATUS
+        LOG DOWNLOAD_LOG)
 
     if(DOWNLOAD_STATUS
        AND NOT
@@ -18,6 +19,7 @@ function(
            EQUAL
            0)
         message(FATAL_ERROR "FAILED to download ${target_filename} (Status: ${DOWNLOAD_STATUS})")
+        message(FATAL_ERROR "DOWNLOAD_LOG: ${DOWNLOAD_LOG}")
     endif()
 
     execute_process(COMMAND sleep 1) # allow for file to be completely flushed

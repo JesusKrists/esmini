@@ -66,7 +66,8 @@ set(DYN_PROTOBUF
 
 set(ESMINI_BUILD_VERSION
     "N/A - client build"
-    CACHE STRING "Esmini CI Build Version")
+    CACHE STRING
+          "Esmini CI Build Version")
 
 # ############################### Setting project rules ############################################################
 

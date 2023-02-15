@@ -87,7 +87,7 @@ UDPServer::UDPServer(unsigned short int port, unsigned int timeoutMs) : UDPBase(
   if (setsockopt(sock_, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeoutMs_, sizeof(timeoutMs_)) != 0)
 #else
   struct timeval tv;
-  tv.tv_sec  = timeoutMs_ / 1000;
+  tv.tv_sec = timeoutMs_ / 1000;
   tv.tv_usec = (timeoutMs_ % 1000) * 1000;
   if (setsockopt(sock_, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
 #endif

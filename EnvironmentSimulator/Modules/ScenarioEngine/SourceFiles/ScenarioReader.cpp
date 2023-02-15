@@ -2467,7 +2467,7 @@ OSCPrivateAction *ScenarioReader::parseOSCPrivateAction(pugi::xml_node actionNod
 
           targetSpeedRel->value_ = strtod(parameters.ReadAttribute(final_speed_element, "value"));
 
-          targetSpeedRel->continuous_ = true;                      // Continuous adaption needed
+          targetSpeedRel->continuous_ = true;  // Continuous adaption needed
 
           targetSpeedRel->object_ = action_synch->master_object_;  // Master object is the pivot vehicle
 

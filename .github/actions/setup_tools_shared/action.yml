@@ -4,7 +4,7 @@ description: Setup platform tools
 #${{ runner.os }}
 
 runs:
-  using: "composite"
+  using: 'composite'
 
   steps:
     - if: runner.os == 'Linux'
@@ -13,14 +13,15 @@ runs:
 
     - uses: actions/setup-python@v4.5.0
       with:
-        python-version: "3.8"
-        cache: "pip"
+        python-version: '3.8'
+        cache: 'pip'
     - run: pip install -r support/python/requirements.txt
       shell: bash
 
     - uses: seanmiddleditch/gha-setup-ninja@v3
 
     - uses: jwlawson/actions-setup-cmake@v1.13.1
+      if: runner.os != 'macOS'
 
     - name: Setup VS Dev Environment - Windows
       if: runner.os == 'Windows'
@@ -36,7 +37,7 @@ runs:
       if: runner.os == 'Windows'
       uses: ssciwr/setup-mesa-dist-win@v1
       with:
-        version: "22.3.5"
+        version: '22.3.5'
 
     - name: Install wglinfo - Windows
       if: runner.os == 'Windows'

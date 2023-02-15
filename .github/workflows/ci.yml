@@ -96,7 +96,6 @@ jobs:
       #  run: python3 main.py generate opendrive
 
       - name: CMake Configure - Default
-        if: runner.os != 'macOS'
         shell: pwsh
         run: cmake "--preset=ci-sanitize" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }}
 

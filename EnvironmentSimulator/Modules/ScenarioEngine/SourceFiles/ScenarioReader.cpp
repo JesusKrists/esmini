@@ -130,7 +130,7 @@ int ScenarioReader::loadOSCFile(const char *path)
         {
           LOG("Parameter permutation %d/%d", dist.GetIndex() + 1, dist.GetNumPermutations());
 
-          for (int i = 0; i < dist.GetNumParameters(); i++)
+          for (unsigned int i = 0; i < dist.GetNumParameters(); i++)
           {
             pugi::xml_node node = doc_.child("OpenSCENARIO").child("ParameterDeclarations").child("ParameterDeclaration");
             for (; node; node = node.next_sibling())
@@ -2467,7 +2467,7 @@ OSCPrivateAction *ScenarioReader::parseOSCPrivateAction(pugi::xml_node actionNod
 
           targetSpeedRel->value_ = strtod(parameters.ReadAttribute(final_speed_element, "value"));
 
-          targetSpeedRel->continuous_ = true;  // Continuous adaption needed
+          targetSpeedRel->continuous_ = true;                      // Continuous adaption needed
 
           targetSpeedRel->object_ = action_synch->master_object_;  // Master object is the pivot vehicle
 

@@ -934,9 +934,9 @@ int ScenarioPlayer::InitViewer()
 
     if (viewer_->AddEntityModel(viewer_->CreateEntityModel(obj->model3d_,
                                                            trail_color,
-                                                           obj->type_ == Object::Type::VEHICLE ? viewer::EntityModel::EntityType::VEHICLE
-                                                           : Object::Type::PEDESTRIAN          ? viewer::EntityModel::EntityType::MOVING
-                                                                                      : viewer::EntityModel::EntityType::ENTITY,  // TODO: @Emil
+                                                           obj->type_ == Object::Type::VEHICLE      ? viewer::EntityModel::EntityType::VEHICLE
+                                                           : obj->type_ == Object::Type::PEDESTRIAN ? viewer::EntityModel::EntityType::MOVING
+                                                                                                    : viewer::EntityModel::EntityType::ENTITY,
                                                            road_sensor,
                                                            obj->name_,
                                                            &obj->boundingbox_,
@@ -1093,10 +1093,15 @@ void ScenarioPlayer::AddOSIDetection(int object_index)
 void ScenarioPlayer::SteeringSensorSetVisible(int object_index, bool value)
 {
 #ifdef _USE_OSG
+  if (viewer_ == nullptr)
+  {
+    return;
+  }
+
   int obj_index = scenarioEngine->entities_.GetObjectIdxById(object_index);
   if (obj_index >= 0)
   {
-    viewer::EntityModel* m = viewer_->entities_[obj_index];
+    viewer::EntityModel* m = viewer_->entities_[static_cast<unsigned int>(obj_index)];
     if (m->IsMoving())
     {
       if (value == true)
@@ -1265,14 +1270,14 @@ int ScenarioPlayer::Init()
 
     if (dist.GetNumPermutations() > 0)
     {
-      if (permutation_index >= dist.GetNumPermutations() || permutation_index < 0)
+      if (permutation_index >= static_cast<int>(dist.GetNumPermutations()) || permutation_index < 0)
       {
         LOG("Requested permutation %d out of range [%d .. %d]", permutation_index, 0, dist.GetNumPermutations() - 1);
         return -1;
       }
       else
       {
-        dist.SetIndex(permutation_index);
+        dist.SetIndex(static_cast<unsigned int>(permutation_index));
       }
     }
     else if (permutation_index > 0)
@@ -1285,7 +1290,7 @@ int ScenarioPlayer::Init()
   {
     if (dist.GetRequestedIndex() > -1)  // Requested via lib API
     {
-      if (dist.SetIndex(dist.GetRequestedIndex()) != 0)
+      if (dist.SetIndex(static_cast<unsigned int>(dist.GetRequestedIndex())) != 0)
       {
         LOG_AND_QUIT("Failed to set requested index %d", dist.GetRequestedIndex());
       }

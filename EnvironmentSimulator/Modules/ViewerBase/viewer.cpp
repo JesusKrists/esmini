@@ -918,7 +918,7 @@ void VisibilityCallback::operator()(osg::Node* sa, osg::NodeVisitor* nv)
   {
     if (object_->visibilityMask_ & scenarioengine::Object::Visibility::GRAPHICS)
     {
-      entity_->txNode_->getChild(0)->setNodeMask(NodeMask::NODE_MASK_ENTITY_MODEL);
+      entity_->txNode_->getChild(0)->setNodeMask(NodeMask::NODE_MASK_ENTITY_MODEL | viewer::NodeMask::NODE_MASK_ENTITY_BB);
       if (object_->visibilityMask_ & scenarioengine::Object::Visibility::SENSORS)
       {
         entity_->SetTransparency(0.0);
@@ -1290,7 +1290,7 @@ void EntityModel::SetRotation(double hRoad, double pRoad, double hRelative, doub
                     pRoad,
                     osg::Vec3(osg::Y_AXIS),  // Pitch
                     hRoad,
-                    osg::Vec3(osg::Z_AXIS)  // Heading
+                    osg::Vec3(osg::Z_AXIS)   // Heading
   );
 
   // Rotation relative road
@@ -1299,7 +1299,7 @@ void EntityModel::SetRotation(double hRoad, double pRoad, double hRelative, doub
                    0,
                    osg::Vec3(osg::Y_AXIS),  // Pitch
                    hRelative,
-                   osg::Vec3(osg::Z_AXIS)  // Heading
+                   osg::Vec3(osg::Z_AXIS)   // Heading
   );
 
   // Combine
@@ -1313,7 +1313,7 @@ void EntityModel::SetRotation(double h, double p, double r)
                    p,
                    osg::Vec3(osg::Y_AXIS),  // Pitch
                    h,
-                   osg::Vec3(osg::Z_AXIS)  // Heading
+                   osg::Vec3(osg::Z_AXIS)   // Heading
   );
 
   txNode_->setAttitude(quat_);
@@ -1329,9 +1329,9 @@ void CarModel::UpdateWheels(double wheel_angle, double wheel_rotation)
   for (size_t i = 0; i < front_wheel_.size(); i++)
   {
     quat.makeRotate(0,
-                    osg::Vec3(1, 0, 0),  // Roll
+                    osg::Vec3(1, 0, 0),   // Roll
                     wheel_rotation,
-                    osg::Vec3(0, 1, 0),  // Pitch
+                    osg::Vec3(0, 1, 0),   // Pitch
                     wheel_angle,
                     osg::Vec3(0, 0, 1));  // Heading
     front_wheel_[i]->setAttitude(quat);
@@ -1341,9 +1341,9 @@ void CarModel::UpdateWheels(double wheel_angle, double wheel_rotation)
   {
     // Update rotation for rear wheels
     quat.makeRotate(0,
-                    osg::Vec3(1, 0, 0),  // Roll
+                    osg::Vec3(1, 0, 0),   // Roll
                     wheel_rotation,
-                    osg::Vec3(0, 1, 0),  // Pitch
+                    osg::Vec3(0, 1, 0),   // Pitch
                     0,
                     osg::Vec3(0, 0, 1));  // Heading
     rear_wheel_[i]->setAttitude(quat);
@@ -1387,7 +1387,7 @@ struct FetchImage : public osg::Camera::DrawCallback
   }
 
   using osg::Camera::DrawCallback::operator();
-  void                             operator()(osg::RenderInfo& renderInfo) const override
+  void operator()(osg::RenderInfo& renderInfo) const override
   {
     if (viewer_ != nullptr && SE_Env::Inst().GetOffScreenRendering() && !viewer_->GetQuitRequest() &&
         (viewer_->GetSaveImagesToRAM() || viewer_->frameCounter_ == 0 || viewer_->GetSaveImagesToFile() != 0 ||

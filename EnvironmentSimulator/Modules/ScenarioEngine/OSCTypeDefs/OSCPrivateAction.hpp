@@ -404,11 +404,7 @@ namespace scenarioengine
       LOG("");
     }
 
-    void ReplaceObjectRefs(Object* obj1, Object* obj2)
-    {
-      (void)obj1;
-      (void)obj2;
-    }
+    void ReplaceObjectRefs(Object* obj1, Object* obj2);
 
     void AddEntry(LongSpeedProfileAction::Entry entry)
     {
@@ -807,7 +803,7 @@ namespace scenarioengine
     std::shared_ptr<OSCPosition> position_OSCPosition_;
     roadmanager::Position*       position_;
 
-    TeleportAction() : OSCPrivateAction(OSCPrivateAction::ActionType::TELEPORT, ControlDomains::DOMAIN_BOTH)
+    TeleportAction() : OSCPrivateAction(OSCPrivateAction::ActionType::TELEPORT, ControlDomains::DOMAIN_BOTH), ghost_restart_(false)
     {
     }
 
@@ -816,6 +812,7 @@ namespace scenarioengine
       name_                 = action.name_;
       position_OSCPosition_ = action.position_OSCPosition_;
       position_             = action.position_;
+      ghost_restart_        = action.ghost_restart_;
     }
 
     ~TeleportAction()
@@ -841,6 +838,18 @@ namespace scenarioengine
     void Start(double simTime, double dt);
 
     void ReplaceObjectRefs(Object* obj1, Object* obj2);
+    void SetGhostRestart(bool value)
+    {
+      ghost_restart_ = value;
+    }
+
+   private:
+    bool ghost_restart_;
+
+    bool IsGhostRestart()
+    {
+      return ghost_restart_;
+    }
   };
 
   class AssignRouteAction : public OSCPrivateAction
@@ -897,6 +906,7 @@ namespace scenarioengine
     double                                     timing_offset_;
     double                                     time_;
     double                                     initialDistanceOffset_;
+    bool                                       reverse_;
 
     FollowTrajectoryAction()
         : OSCPrivateAction(OSCPrivateAction::ActionType::FOLLOW_TRAJECTORY, ControlDomains::DOMAIN_BOTH),
@@ -906,7 +916,8 @@ namespace scenarioengine
           timing_scale_(1),
           timing_offset_(0),
           time_(0),
-          initialDistanceOffset_(0)
+          initialDistanceOffset_(0),
+          reverse_(false)
     {
     }
 
@@ -920,6 +931,7 @@ namespace scenarioengine
       timing_offset_         = action.timing_offset_;
       initialDistanceOffset_ = action.timing_offset_;
       following_mode_        = action.following_mode_;
+      reverse_               = action.reverse_;
       time_                  = 0;
     }
 

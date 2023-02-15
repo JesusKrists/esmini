@@ -252,21 +252,9 @@ static int GetRoadInfoAtDistance(int object_id, float lookahead_distance, SE_Roa
     r_data->s             = static_cast<float>(s_data.road_lane_info.s);
     r_data->t             = static_cast<float>(s_data.road_lane_info.t);
 
-// Add visualization of forward looking road sensor probe
-#ifdef _USE_OSG
-    if (player->viewer_ && static_cast<unsigned int>(object_id) < player->viewer_->entities_.size() &&
-        player->viewer_->entities_[static_cast<unsigned int>(object_id)]->GetType() == viewer::EntityModel::EntityType::VEHICLE)
-    {
-      viewer::CarModel *model = static_cast<viewer::CarModel *>(player->viewer_->entities_[static_cast<unsigned int>(object_id)]);
-      model->steering_sensor_->Show();
-      player->viewer_->SensorSetPivotPos(model->steering_sensor_, pos->GetX(), pos->GetY(), pos->GetZ());
-      player->viewer_->SensorSetTargetPos(model->steering_sensor_,
-                                          s_data.road_lane_info.pos[0],
-                                          s_data.road_lane_info.pos[1],
-                                          s_data.road_lane_info.pos[2]);
-      player->viewer_->UpdateSensor(model->steering_sensor_);
-    }
-#endif
+    // Visualize forward looking road sensor probe
+    main_object->SetSensorPosition(s_data.road_lane_info.pos[0], s_data.road_lane_info.pos[1], s_data.road_lane_info.pos[2]);
+    player->SteeringSensorSetVisible(object_id, true);
   }
 
   return static_cast<int>(retval);
@@ -512,12 +500,12 @@ extern "C"
 
   SE_DLL_API int SE_GetNumberOfPermutations()
   {
-    return OSCParameterDistribution::Inst().GetNumPermutations();
+    return static_cast<int>(OSCParameterDistribution::Inst().GetNumPermutations());
   }
 
   SE_DLL_API int SE_SelectPermutation(int index)
   {
-    return OSCParameterDistribution::Inst().SetRequestedIndex(index);
+    return OSCParameterDistribution::Inst().SetRequestedIndex(static_cast<unsigned int>(index));
   }
 
   SE_DLL_API int SE_GetPermutationIndex()

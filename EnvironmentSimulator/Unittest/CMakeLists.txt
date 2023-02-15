@@ -36,6 +36,7 @@ unittest(
     RoadManager
     CommonMini
     PlayerBase
+    ScenarioEngine
     ${VIEWER_LIBS_FOR_TEST}
     ${OSG_LIBRARIES}
     ${OSI_LIBRARIES}
@@ -107,8 +108,9 @@ unittest(
     FollowRouteController_test.cpp
     ScenarioEngine
     Controllers
-    RoadManager
     PlayerBase
+    ScenarioEngine
+    RoadManager
     ${VIEWER_LIBS_FOR_TEST}
     ${OSG_LIBRARIES}
     ${OSI_LIBRARIES}

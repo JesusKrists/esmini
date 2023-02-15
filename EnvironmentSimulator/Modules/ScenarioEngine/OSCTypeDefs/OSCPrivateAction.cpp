@@ -316,6 +316,8 @@ void FollowTrajectoryAction::Start(double simTime, double dt)
     return;
   }
 
+  reverse_ = (object_->GetSpeed() < 0.0);
+
   traj_->Freeze(following_mode_, object_->GetSpeed());
   object_->pos_.SetTrajectory(traj_.get());
 
@@ -364,10 +366,11 @@ void FollowTrajectoryAction::Step(double simTime, double dt)
     return;
   }
 
+  int    dir   = reverse_ ? -1 : 1;
   double old_s = object_->pos_.GetTrajectoryS();
 
-  // Adjust time for any ghost headstart
-  double timeOffset = object_->IsGhost() ? object_->GetHeadstartTime() : 0.0;
+  // Adjust absolute time for any ghost headstart
+  double timeOffset = (timing_domain_ == TimingDomain::TIMING_RELATIVE && object_->IsGhost()) ? object_->GetHeadstartTime() : 0.0;
 
   // Move along trajectory
   if (
@@ -376,16 +379,16 @@ void FollowTrajectoryAction::Step(double simTime, double dt)
       // Speed is controlled elsewhere - just follow trajectory with current speed
       (object_->GetControllerMode() == Controller::Mode::MODE_OVERRIDE && object_->IsControllerActiveOnDomains(ControlDomains::DOMAIN_LONG)))
   {
-    object_->pos_.MoveTrajectoryDS(object_->speed_ * dt);
+    object_->pos_.MoveTrajectoryDS(dir * object_->speed_ * dt);
   }
   else if (timing_domain_ == TimingDomain::TIMING_RELATIVE)
   {
     time_ += timing_scale_ * dt;
-    object_->pos_.SetTrajectoryPosByTime(time_ + timeOffset + timing_offset_);
+    object_->pos_.SetTrajectoryPosByTime(time_ + timing_offset_);
 
     // calculate and update actual speed only while not reached end of trajectory,
     // since the movement is based on remaining length of trajectory, not speed
-    if (time_ + timeOffset < traj_->GetStartTime() + traj_->GetDuration() + SMALL_NUMBER)
+    if (time_ + timing_offset_ < traj_->GetStartTime() + traj_->GetDuration() + SMALL_NUMBER)
     {
       if (dt > SMALL_NUMBER)  // only update speed if some time has passed
       {
@@ -396,13 +399,20 @@ void FollowTrajectoryAction::Step(double simTime, double dt)
   else if (timing_domain_ == TimingDomain::TIMING_ABSOLUTE)
   {
     time_ = (simTime + dt) * timing_scale_;
+
     object_->pos_.SetTrajectoryPosByTime(time_ + timeOffset + timing_offset_);
-    if (time_ + timeOffset <= traj_->GetStartTime() + traj_->GetDuration())
+    if (time_ + timeOffset < traj_->GetStartTime() + traj_->GetDuration() + SMALL_NUMBER)
     {
       // don't calculate and update actual speed when reached end of trajectory,
       // since the movement is based on remaining length of trajectory, not speed
       object_->SetSpeed((object_->pos_.GetTrajectoryS() - old_s) / MAX(SMALL_NUMBER, dt));
     }
+  }
+
+  // align heading to driving direction
+  if (reverse_)
+  {
+    object_->pos_.SetHeading(GetAngleInInterval2PI(object_->pos_.GetH() + M_PI));
   }
 
   // Check end conditions:
@@ -411,8 +421,10 @@ void FollowTrajectoryAction::Step(double simTime, double dt)
   //     open trajectories simply ends when s >= length of trajectory
   // Trajectories with time stamps:
   //     always ends when time >= trajectory duration (last timestamp)
-  if (((timing_domain_ == TimingDomain::NONE && !traj_->closed_ && object_->pos_.GetTrajectoryS() > (traj_->GetLength() - SMALL_NUMBER)) ||
-       (timing_domain_ != TimingDomain::NONE && time_ + timeOffset >= traj_->GetStartTime() + traj_->GetDuration())))
+  if (((timing_domain_ == TimingDomain::NONE && !traj_->closed_) && dt > 0.0 &&
+       ((dir * object_->GetSpeed() > 0.0 && object_->pos_.GetTrajectoryS() > (traj_->GetLength() - SMALL_NUMBER)) ||
+        (dir * object_->GetSpeed() < 0.0 && object_->pos_.GetTrajectoryS() < SMALL_NUMBER))) ||
+      (timing_domain_ != TimingDomain::NONE && time_ + timeOffset >= traj_->GetStartTime() + traj_->GetDuration()))
   {
     // Reached end of trajectory
     // Calculate road coordinates from final inertia (X, Y) coordinates
@@ -1387,6 +1399,19 @@ void LongSpeedProfileAction::CheckSpeed(double speed)
   }
 }
 
+void LongSpeedProfileAction::ReplaceObjectRefs(Object* obj1, Object* obj2)
+{
+  if (object_ == obj1)
+  {
+    object_ = obj2;
+  }
+
+  if (entity_ref_ == obj1)
+  {
+    entity_ref_ = obj2;
+  }
+}
+
 void LongSpeedProfileAction::AddSpeedSegment(double t, double v, double k, double j)
 {
   CheckSpeed(v);
@@ -1569,7 +1594,7 @@ void TeleportAction::Start(double simTime, double dt)
   OSCAction::Start(simTime, dt);
   LOG("Starting teleport Action");
 
-  if (object_->IsGhost() && scenarioEngine_->getSimulationTime() > SMALL_NUMBER)
+  if (object_->IsGhost() && IsGhostRestart() && scenarioEngine_->getSimulationTime() > SMALL_NUMBER)
   {
     scenarioEngine_->SetGhostRestart();
 
@@ -1619,6 +1644,8 @@ void TeleportAction::ReplaceObjectRefs(Object* obj1, Object* obj2)
   {
     object_ = obj2;
   }
+
+  position_->ReplaceObjectRefs(&obj1->pos_, &obj2->pos_);
 }
 
 double SynchronizeAction::CalcSpeedForLinearProfile(double v_final, double time, double dist)

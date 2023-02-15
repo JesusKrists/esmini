@@ -177,6 +177,10 @@ jobs:
         shell: pwsh
         run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 
+      - name: Debugging with tmate
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3.14
+
       - name: CMake Build
         run: cmake --build build --config ${{ matrix.configuration }} --target install -j 2
 

@@ -136,7 +136,10 @@
       "inherits": [
         "ci-macos",
         "test-win_unix"
-      ]
+      ],
+      "cacheVariables": {
+        "ENABLE_WARNINGS_AS_ERRORS": "OFF"
+      }
     },
     {
       "name": "ci-ubuntu-test",
@@ -161,7 +164,10 @@
         "disable-osg",
         "disable-osi",
         "disable-sumo"
-      ]
+      ],
+      "cacheVariables": {
+        "ENABLE_WARNINGS_AS_ERRORS": "OFF"
+      }
     },
     {
       "name": "ci-ubuntu-test-no-external-modules",

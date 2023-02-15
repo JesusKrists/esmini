@@ -64,6 +64,10 @@ set(DYN_PROTOBUF
     CACHE BOOL
           "Set for dynamic linking of protobuf library (.so/.dll)")
 
+set(ESMINI_BUILD_VERSION
+    "N/A - client build"
+    CACHE STRING "Esmini CI Build Version")
+
 # ############################### Setting project rules ############################################################
 
 if(WIN32)

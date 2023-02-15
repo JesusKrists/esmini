@@ -48,63 +48,10 @@ else()
               GIT_BRANCH)
 endif()
 
-set(VERSION
-    "const char* ESMINI_GIT_REV=\"${GIT_REV}${GIT_DIFF}\";
-const char* ESMINI_GIT_TAG=\"${GIT_TAG}\";
-const char* ESMINI_GIT_BRANCH=\"${GIT_BRANCH}\";\n")
+# const char* ESMINI_GIT_REV=\"${GIT_REV}${GIT_DIFF}\"; const char* ESMINI_GIT_TAG=\"${GIT_TAG}\"; const char* ESMINI_GIT_BRANCH=\"${GIT_BRANCH}\";
+# const char* ESMINI_BUILD_VERSION=\"${ESMINI_BUILD_VERSION}\";
 
-if(EXISTS
-   ${CMAKE_CURRENT_SOURCE_DIR}/version.cpp)
-    file(
-        READ
-        ${CMAKE_CURRENT_SOURCE_DIR}/version.cpp
-        VERSION_FROM_FILE)
-else()
-    set(VERSION_FROM_FILE
-        "")
-endif()
-
-if(NOT
-   "${VERSION_FROM_FILE}"
-   STREQUAL
-   "${VERSION}")
-    file(
-        WRITE
-        ${CMAKE_CURRENT_SOURCE_DIR}/version.cpp
-        "${VERSION}")
-    set(VERSION_FROM_FILE
-        ${VERSION})
-endif()
-
-if(NOT
-   EXISTS
-   ${CMAKE_CURRENT_SOURCE_DIR}/buildnr.cpp)
-    file(
-        WRITE
-        ${CMAKE_CURRENT_SOURCE_DIR}/buildnr.cpp
-        "const char* ESMINI_BUILD_VERSION=\"N/A - client build\";\n")
-endif()
-
-string(
-    REGEX
-    REPLACE "const char\\* "
-            ""
-            VERSION_TO_TXT_FILE
-            ${VERSION_FROM_FILE})
-
-file(
-    READ
-    ${CMAKE_CURRENT_SOURCE_DIR}/buildnr.cpp
-    BUILD_NR_)
-
-string(
-    REGEX
-    REPLACE "const char\\* "
-            ""
-            BUILD_NR_TO_TXT_FILE
-            ${BUILD_NR_})
-
-file(
-    WRITE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../version.txt
-    "${VERSION_TO_TXT_FILE}${BUILD_NR_TO_TXT_FILE}")
+configure_file(
+    "version.cpp.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/version.cpp"
+    ESCAPE_QUOTES)

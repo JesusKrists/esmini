@@ -11,8 +11,7 @@ function(
         ${url}
         ${target_folder}/${target_filename}
         STATUS DOWNLOAD_STATUS
-        LOG DOWNLOAD_LOG
-        TLS_VERIFY ON)
+        LOG DOWNLOAD_LOG)
 
     if(DOWNLOAD_STATUS
        AND NOT

@@ -1,5 +1,26 @@
 #!/bin/bash
 
+arg1=$1
+arg2=$2
+
+buildConfiguration="Release"
+skipSmokeTests=false
+
+if ! [[ -z "$arg1" ]]; then
+    if [[ "$arg1" = "Debug" ]]; then
+        buildConfiguration="Debug"
+    fi 
+fi
+
+if ! [[ -z "$arg2" ]]; then
+    if [[ "$arg2" = true ]]; then
+        skipSmokeTests=true
+    fi 
+fi
+
+echo "$buildConfiguration - Skip Smoke tests: $skipSmokeTests"
+
+
 # Run from esmini root ddirectory: ./scripts/run_unittests.sh
 
 exit_with_msg() {
@@ -16,13 +37,8 @@ export UNIT_TEST_FOLDER=${workingDir}/build/EnvironmentSimulator/Unittest
 export SMOKE_TEST_FOLDER=${workingDir}/test
 
 if [[ "$OSTYPE" == "msys" ]]; then
-    if [[ -z "$1" ]]; then
-        export PATH=${PATH}";../Libraries/esminiLib/Release;../Libraries/esminiRMLib/Release"
-        export EXE_FOLDER="./Release"
-    else
-        export PATH=${PATH}";../Libraries/esminiLib/$1;../Libraries/esminiRMLib/$1"
-        export EXE_FOLDER="./$1"
-    fi
+    export PATH=${PATH}";../Libraries/esminiLib/$buildConfiguration;../Libraries/esminiRMLib/$buildConfiguration"
+    export EXE_FOLDER="./$buildConfiguration"
     export PYTHON="python"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     export LD_LIBRARY_PATH=${workingDir}"/externals/OSI/linux/lib-dyn"
@@ -80,10 +96,14 @@ fi
 
 cd $SMOKE_TEST_FOLDER
 
-echo $'\n'Run smoke tests:
+if [[ "$skipSmokeTests" == false ]]; then
 
-if ! ${PYTHON} smoke_test.py; then
-    exit_with_msg "smoke test failed"
+    echo $'\n'Run smoke tests:
+
+    if ! ${PYTHON} smoke_test.py; then
+        exit_with_msg "smoke test failed"
+    fi
+
 fi
 
 echo $'\n'Run ALKS test suite:

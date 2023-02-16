@@ -118,7 +118,14 @@
       ]
     },
     {
-      "name": "ci-sanitize",
+      "name": "ci-sanitize-ubuntu",
+      "inherits": [
+        "ci-ubuntu",
+        "sanitize-build"
+      ]
+    },
+    {
+      "name": "ci-sanitize-macos",
       "inherits": [
         "ci-ubuntu",
         "sanitize-build"

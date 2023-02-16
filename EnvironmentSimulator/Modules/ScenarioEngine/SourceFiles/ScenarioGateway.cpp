@@ -54,7 +54,7 @@ ObjectState::ObjectState(int                    id,
   state_.info.model_id     = model_id;
   state_.info.ctrl_type    = ctrl_type;
   state_.info.timeStamp    = timestamp;
-  StrCopy(state_.info.name, name.c_str(), NAME_LEN);
+  StrCopy(state_.info.name, name.c_str(), name.length() + 1);
   state_.pos                  = *pos;
   state_.info.speed           = speed;
   state_.info.wheel_angle     = wheel_angle;
@@ -97,7 +97,7 @@ ObjectState::ObjectState(int            id,
   state_.info.ctrl_type    = ctrl_type;
   state_.info.name[0]      = 0;
   state_.info.timeStamp    = timestamp;
-  StrCopy(state_.info.name, name.c_str(), NAME_LEN);
+  StrCopy(state_.info.name, name.c_str(), name.length() + 1);
   state_.pos.Init();
   state_.pos.SetInertiaPos(x, y, z, h, p, r);
   state_.info.speed           = speed;
@@ -138,7 +138,7 @@ ObjectState::ObjectState(int            id,
   state_.info.model_id     = model_id;
   state_.info.ctrl_type    = ctrl_type;
   state_.info.timeStamp    = timestamp;
-  StrCopy(state_.info.name, name.c_str(), NAME_LEN);
+  StrCopy(state_.info.name, name.c_str(), name.length() + 1);
   state_.pos.SetLanePos(roadId, laneId, s, laneOffset);
   state_.info.speed           = speed;
   state_.info.wheel_angle     = wheel_angle;
@@ -176,7 +176,7 @@ ObjectState::ObjectState(int            id,
   state_.info.model_id     = model_id;
   state_.info.ctrl_type    = ctrl_type;
   state_.info.timeStamp    = timestamp;
-  StrCopy(state_.info.name, name.c_str(), NAME_LEN);
+  StrCopy(state_.info.name, name.c_str(), name.length() + 1);
   state_.pos.SetTrackPos(roadId, s, lateralOffset);
   state_.info.speed           = speed;
   state_.info.wheel_angle     = wheel_angle;

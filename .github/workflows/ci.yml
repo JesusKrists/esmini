@@ -179,10 +179,16 @@ jobs:
       - name: CMake Build
         run: cmake --build build --config ${{ matrix.configuration }} --target install -j 2
 
-      - name: Run Tests
+      - name: Run Tests - Unix
+        if: runner.os != 'Windows'
         uses: GabrielBB/xvfb-action@v1.6
         with:
           run: ./scripts/run_tests.sh
+
+      - name: Run Tests - Windows
+        if: runner.os == 'Windows'
+        shell: bash
+        run: ./scripts/run_tests.sh ${{ matrix.configuration }}
 
       - name: Debugging with tmate
         if: ${{ failure() }}
@@ -260,5 +266,13 @@ jobs:
       - name: CMake Build
         run: cmake --build build --config ${{ matrix.configuration }} --target install -j 2
 
-      - name: Run Tests
-        run: ./scripts/run_tests.sh
+      - name: Run Tests - Unix
+        if: runner.os != 'Windows'
+        uses: GabrielBB/xvfb-action@v1.6
+        with:
+          run: ./scripts/run_tests.sh
+
+      - name: Run Tests - Windows
+        if: runner.os == 'Windows'
+        shell: bash
+        run: ./scripts/run_tests.sh ${{ matrix.configuration }}

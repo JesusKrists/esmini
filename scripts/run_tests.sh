@@ -16,8 +16,13 @@ export UNIT_TEST_FOLDER=${workingDir}/build/EnvironmentSimulator/Unittest
 export SMOKE_TEST_FOLDER=${workingDir}/test
 
 if [[ "$OSTYPE" == "msys" ]]; then
-    export PATH=${PATH}";../Libraries/esminiLib/Release;../Libraries/esminiRMLib/Release"
-    export EXE_FOLDER="./Release"
+    if [[ -z "$1" ]]; then
+        export PATH=${PATH}";../Libraries/esminiLib/Release;../Libraries/esminiRMLib/Release"
+        export EXE_FOLDER="./Release"
+    else
+        export PATH=${PATH}";../Libraries/esminiLib/$1;../Libraries/esminiRMLib/$1"
+        export EXE_FOLDER="./$1"
+    fi
     export PYTHON="python"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     export LD_LIBRARY_PATH=${workingDir}"/externals/OSI/linux/lib-dyn"

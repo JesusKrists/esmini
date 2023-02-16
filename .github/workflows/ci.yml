@@ -187,6 +187,8 @@ jobs:
 
       - name: Run Tests - Windows
         if: runner.os == 'Windows'
+        env:
+          GALLIUM_DRIVER: llvmpipe
         shell: bash
         run: ./scripts/run_tests.sh ${{ matrix.configuration }}
 
@@ -274,5 +276,7 @@ jobs:
 
       - name: Run Tests - Windows
         if: runner.os == 'Windows'
+        env:
+          GALLIUM_DRIVER: llvmpipe
         shell: bash
         run: ./scripts/run_tests.sh ${{ matrix.configuration }}

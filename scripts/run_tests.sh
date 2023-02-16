@@ -4,7 +4,7 @@ arg1=$1
 arg2=$2
 
 buildConfiguration="Release"
-skipSmokeTests=false
+skipOpenGLTests=false
 
 if ! [[ -z "$arg1" ]]; then
     if [[ "$arg1" = "Debug" ]]; then
@@ -14,11 +14,11 @@ fi
 
 if ! [[ -z "$arg2" ]]; then
     if [[ "$arg2" = true ]]; then
-        skipSmokeTests=true
+        skipOpenGLTests=true
     fi 
 fi
 
-echo "$buildConfiguration - Skip Smoke tests: $skipSmokeTests"
+echo "$buildConfiguration - Skip OpenGL tests: $skipOpenGLTests"
 
 
 # Run from esmini root ddirectory: ./scripts/run_unittests.sh
@@ -76,9 +76,12 @@ if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "linux-gnu"* ]]; then
         exit_with_msg "ScenarioPlayer_test failed"
     fi
 
-    if ! ${EXE_FOLDER}/ScenarioEngineDll_test; then
-        exit_with_msg "ScenarioEngineDll_test failed"
+    if [[ "$skipOpenGLTests" == false ]]; then
+        if ! ${EXE_FOLDER}/ScenarioEngineDll_test; then
+            exit_with_msg "ScenarioEngineDll_test failed"
+        fi
     fi
+
     ls -al *.tga *.ppm
 
     if ! ${EXE_FOLDER}/RoadManagerDll_test; then
@@ -96,7 +99,7 @@ fi
 
 cd $SMOKE_TEST_FOLDER
 
-if [[ "$skipSmokeTests" == false ]]; then
+if [[ "$skipOpenGLTests" == false ]]; then
 
     echo $'\n'Run smoke tests:
 

@@ -19,8 +19,15 @@ if("${GIT_REV}"
         "N/A")
 else()
     execute_process(
-        COMMAND bash -c "git diff --quiet --exit-code || echo +"
-        OUTPUT_VARIABLE GIT_DIFF)
+        COMMAND bash -c "git diff --quiet --exit-code"
+        RESULT_VARIABLE exit_code)
+    if(NOT
+       exit_code
+       EQUAL
+       "0")
+        set(GIT_DIFF
+            "+")
+    endif()
     execute_process(
         COMMAND git describe --exact-match --tags
         OUTPUT_VARIABLE GIT_TAG

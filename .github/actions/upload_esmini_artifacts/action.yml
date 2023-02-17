@@ -15,7 +15,8 @@ runs:
       shell: bash
       run: |
         mkdir esmini \
-        && cp -p --recursive --parents -t esmini/ \
+        && shopt -s extglob \
+        && tar -c \
         bin/ \
         EnvironmentSimulator/Applications/odrplot/xodr.py \
         EnvironmentSimulator/Libraries/esminiRMLib/esminiRMLib.hpp \
@@ -23,7 +24,8 @@ runs:
         EnvironmentSimulator/Libraries/esminiRMLib/esminiRMUnityUtil.cs \
         EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp \
         EnvironmentSimulator/Libraries/esminiLib/ESMiniWrapper.cs \
-        version.txt
+        version.txt \
+        | tar -C esmini -x
 
     - name: Upload release artifact
       uses: actions/upload-artifact@v3.1.2
@@ -35,7 +37,8 @@ runs:
       shell: bash
       run: |
         mkdir esmini-demo \
-        && cp -p --recursive --parents -t esmini-demo/ \
+        && shopt -s extglob \
+        && tar -c  \
         resources/xosc/follow_ghost.xosc \
         resources/xosc/cut-in.xosc \
         resources/xosc/cut-in_parameter_set.xosc \
@@ -176,20 +179,16 @@ runs:
         LICENSE \
         release_notes.md \
         version.txt \
-        bin/esmini \
-        bin/esmini.exe \
-        bin/odrviewer \
-        bin/odrviewer.exe \
-        bin/replayer \
-        bin/replayer.exe \
-        bin/dat2csv \
-        bin/dat2csv.exe \
-        bin/odrplot \
-        bin/odrplot.exe \
+        bin/esmini?(.exe) \
+        bin/odrviewer?(.exe) \
+        bin/replayer?(.exe) \
+        bin/dat2csv?(.exe) \
+        bin/odrplot?(.exe) \
         bin/*esminiLib.* \
         EnvironmentSimulator/Applications/odrplot/xodr.py \
         EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp \
-        Hello-World_coding-example/ || :
+        Hello-World_coding-example/ \
+        | tar -C esmini-demo -x
 
     - name: Upload demo artifact
       uses: actions/upload-artifact@v3.1.2

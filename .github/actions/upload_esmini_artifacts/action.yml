@@ -11,9 +11,12 @@ runs:
       run: lipo -create bin/libesminiRMLib.dylib -output bin/esminiRMLib.bundle
         && lipo -create bin/libesminiLib.dylib -output bin/esminiLib.bundle
 
+    - name: Move one folder back from workspace
+      shell: bash
+      run: cd ${{ github.workspace }}/..
+
     - name: Upload release artifact
       uses: actions/upload-artifact@v3.1.2
-      working-directory: ./../
       with:
         name: esmini-bin_${{ runner.os }}
         path: |
@@ -25,6 +28,10 @@ runs:
           esmini/EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp 
           esmini/EnvironmentSimulator/Libraries/esminiLib/ESMiniWrapper.cs
           esmini/version.txt
+
+    - name: Move back to workspace folder
+      shell: bash
+      run: cd ${{ github.workspace }}
 
     - name: Upload demo artifact
       uses: actions/upload-artifact@v3.1.2

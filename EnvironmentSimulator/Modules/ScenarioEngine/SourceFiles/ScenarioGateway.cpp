@@ -985,8 +985,8 @@ int ScenarioGateway::RecordToFile(std::string filename, std::string odr_filename
     }
     DatHeader header;
     header.version = DAT_FILE_FORMAT_VERSION;
-    StrCopy(header.odr_filename, odr_filename.c_str(), DAT_FILENAME_SIZE);
-    StrCopy(header.model_filename, model_filename.c_str(), DAT_FILENAME_SIZE);
+    StrCopy(header.odr_filename, odr_filename.c_str(), odr_filename.length() + 1);
+    StrCopy(header.model_filename, model_filename.c_str(), model_filename.length() + 1);
 
     data_file_.write(reinterpret_cast<char*>(&header), sizeof(header));
   }

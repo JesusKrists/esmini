@@ -147,6 +147,15 @@ jobs:
         shell: bash
         run: ./scripts/run_tests.sh ${{ matrix.configuration }}
 
+      - uses: ./.github/actions/zip_release_artifacts
+
+      - name: Upload release artifacts
+        if: matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v3
+        with:
+          name: esmini-bin_${{ runner.os }}
+          path: ./esmini-bin_*.zip
+
       - name: Debugging with tmate
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3.14

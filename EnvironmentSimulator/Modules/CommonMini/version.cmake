@@ -58,7 +58,16 @@ endif()
 # const char* ESMINI_GIT_REV=\"${GIT_REV}${GIT_DIFF}\"; const char* ESMINI_GIT_TAG=\"${GIT_TAG}\"; const char* ESMINI_GIT_BRANCH=\"${GIT_BRANCH}\";
 # const char* ESMINI_BUILD_VERSION=\"${ESMINI_BUILD_VERSION}\";
 
+set(VERSION_TO_TXT_FILE
+    "ESMINI_GIT_REV=\"${GIT_REV}${GIT_DIFF}\"\nESMINI_GIT_TAG=\"${GIT_TAG}\"\nESMINI_GIT_BRANCH=\"${GIT_BRANCH}\"\nESMINI_BUILD_VERSION=\"${ESMINI_BUILD_VERSION}\""
+)
+
 configure_file(
     "version.cpp.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/version.cpp"
     ESCAPE_QUOTES)
+
+file(
+    WRITE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../version.txt
+    "${VERSION_TO_TXT_FILE}")

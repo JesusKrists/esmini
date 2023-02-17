@@ -1,8 +1,6 @@
 name: Setup tools shared
 description: Setup platform tools
 
-#${{ runner.os }}
-
 runs:
   using: 'composite'
 

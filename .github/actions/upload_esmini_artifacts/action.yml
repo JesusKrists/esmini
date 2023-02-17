@@ -11,11 +11,17 @@ runs:
       run: lipo -create bin/libesminiRMLib.dylib -output bin/esminiRMLib.bundle
         && lipo -create bin/libesminiLib.dylib -output bin/esminiLib.bundle
 
+    - name: Make scripts and binaries runnable - Unix
+      if: runner.os == 'macOS' || runner.os == 'Linux'
+      shell: bash
+      run: sudo chmod -R +x ./run/*
+        && sudo chmod -R +x ./scripts/*
+
     - name: Copy Release artifacts to esmini prefix folder structure
       shell: bash
       run: >
         mkdir esmini &&
-        tar -c
+        tar -c -p
         bin/
         EnvironmentSimulator/Applications/odrplot/xodr.py
         EnvironmentSimulator/Libraries/esminiRMLib/esminiRMLib.hpp
@@ -24,13 +30,7 @@ runs:
         EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp
         EnvironmentSimulator/Libraries/esminiLib/ESMiniWrapper.cs
         version.txt
-        | tar -C esmini -x
-
-    - name: Make scripts and binaries runnable for Release - Unix
-      if: runner.os == 'macOS' || runner.os == 'Linux'
-      shell: bash
-      run: sudo chmod -R +x ./esmini/run/*
-        && sudo chmod -R +x ./esmini/scripts/*
+        | tar -C -p esmini -x
 
     - name: Upload release artifact
       uses: actions/upload-artifact@v3.1.2
@@ -42,12 +42,6 @@ runs:
       shell: bash
       run: >
         ./scripts/generate_binary_dist.sh
-
-    - name: Make scripts and binaries runnable for Release - Unix
-      if: runner.os == 'macOS' || runner.os == 'Linux'
-      shell: bash
-      run: sudo chmod -R +x ./esmini-demo/run/*
-        && sudo chmod -R +x ./esmini-demo/scripts/*
 
     - name: Upload demo artifact
       uses: actions/upload-artifact@v3.1.2

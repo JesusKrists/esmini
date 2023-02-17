@@ -13,6 +13,7 @@ runs:
 
     - name: Upload release artifact
       uses: actions/upload-artifact@v3
+      working-directory: ${{ github.workspace }}/..
       with:
         name: esmini-bin_${{ runner.os }}
         path: |
@@ -64,11 +65,11 @@ runs:
           resources/xosc/trailers.xosc
           resources/xosc/speed-profile.xosc
           resources/xosc/alks_r157_cut_in_quick_brake.xosc
-          *resources/xosc/Catalogs/Maneuvers/*.*
-          *resources/xosc/Catalogs/Routes/*.*
-          *resources/xosc/Catalogs/Vehicles/*.*
-          *resources/xosc/Catalogs/Controllers/*.*
-          *resources/xosc/Catalogs/Pedestrians/*.*
+          resources/xosc/Catalogs/Maneuvers/*.*
+          resources/xosc/Catalogs/Routes/*.*
+          resources/xosc/Catalogs/Vehicles/*.*
+          resources/xosc/Catalogs/Controllers/*.*
+          resources/xosc/Catalogs/Pedestrians/*.*
           resources/xodr/soderleden.xodr
           resources/xodr/e6mini.xodr
           resources/xodr/e6mini-lht.xodr
@@ -122,40 +123,40 @@ runs:
           resources/models/hedge.osgb
           resources/models/fence_plank.osgb
           resources/models/fence_pole.osgb
-          *resources/sumo_inputs/e6mini*
-          *resources/sumo_inputs/multi_intersections*
+          resources/sumo_inputs/e6mini*
+          resources/sumo_inputs/multi_intersections*
           resources/traffic_signals/
-          *run/esmini/run_follow_ghost.*
-          *run/esmini/run_ltap-od_interactive.*
-          *run/esmini/run_ltap-od.*
-          *run/esmini/run_highway-merge_advanced_internal.*
-          *run/esmini/run_cut-in.*
-          *run/esmini/run_cut-in_interactive.*
-          *run/esmini/run_cut-in_sumo.*
-          *run/esmini/run_lane_change.*
-          *run/esmini/run_lane_change_simple.*
-          *run/esmini/run_left-hand-traffic.*
-          *run/esmini/run_dist_test.*
-          *run/esmini/run_synchronize.*
-          *run/esmini/run_synchronize_interactive.*
-          *run/esmini/run_parking_lot.*
-          *run/esmini/run_trajectory-test.*
-          *run/esmini/run_pedestrian*.*
-          *run/esmini/run_controller_test*.*
-          *run/esmini/run_synch_with_steady_state*.*
-          *run/esmini/run_lane_change_crest.*
-          *run/esmini/run_lane_change_crest_driver-view.*
-          *run/esmini/run_routing-test.*
-          *run/esmini/run_drop-bike.*
-          *run/esmini/run_sumo-test.*
-          *run/esmini/run_acc-test.*
+          run/esmini/run_follow_ghost.*
+          run/esmini/run_ltap-od_interactive.*
+          run/esmini/run_ltap-od.*
+          run/esmini/run_highway-merge_advanced_internal.*
+          run/esmini/run_cut-in.*
+          run/esmini/run_cut-in_interactive.*
+          run/esmini/run_cut-in_sumo.*
+          run/esmini/run_lane_change.*
+          run/esmini/run_lane_change_simple.*
+          run/esmini/run_left-hand-traffic.*
+          run/esmini/run_dist_test.*
+          run/esmini/run_synchronize.*
+          run/esmini/run_synchronize_interactive.*
+          run/esmini/run_parking_lot.*
+          run/esmini/run_trajectory-test.*
+          run/esmini/run_pedestrian*.*
+          run/esmini/run_controller_test*.*
+          run/esmini/run_synch_with_steady_state*.*
+          run/esmini/run_lane_change_crest.*
+          run/esmini/run_lane_change_crest_driver-view.*
+          run/esmini/run_routing-test.*
+          run/esmini/run_drop-bike.*
+          run/esmini/run_sumo-test.*
+          run/esmini/run_acc-test.*
           run/esmini/run_swarm.*
-          *run/esmini/run_trailers.*
-          *run/odrviewer/run_e6mini*.*
-          *run/odrviewer/run_multi_intersections*.*
-          *run/replayer/run_and_plot_cut-in_speed*.*
-          *run/replayer/run_and_plot_ltap-od_pos*.*
-          *run/replayer/run_and_replay_lane-change_clothoid*.*
+          run/esmini/run_trailers.*
+          run/odrviewer/run_e6mini*.*
+          run/odrviewer/run_multi_intersections*.*
+          run/replayer/run_and_plot_cut-in_speed*.*
+          run/replayer/run_and_plot_ltap-od_pos*.*
+          run/replayer/run_and_replay_lane-change_clothoid*.*
           scripts/dat.py
           scripts/plot.py
           scripts/plot_dat.py
@@ -170,11 +171,11 @@ runs:
           LICENSE
           release_notes.md
           version.txt
-          bin/esmini?(.exe)
-          bin/odrviewer?(.exe)
-          bin/replayer?(.exe)
-          bin/dat2csv?(.exe)
-          bin/odrplot?(.exe)
+          bin/esmini*(.exe)
+          bin/odrviewer*(.exe)
+          bin/replayer*(.exe)
+          bin/dat2csv*(.exe)
+          bin/odrplot*(.exe)
           bin/*esminiLib.*
           EnvironmentSimulator/Applications/odrplot/xodr.py
           EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp

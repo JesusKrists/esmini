@@ -21,7 +21,8 @@ runs:
       shell: bash
       run: >
         mkdir esmini &&
-        shopt -s extglob
+        sudo shopt -s extglob &&
+        sudo shopt extglob &&
         tar -c
         bin/
         EnvironmentSimulator/Applications/odrplot/xodr.py
@@ -43,7 +44,8 @@ runs:
       shell: bash
       run: >
         mkdir esmini-demo &&
-        shopt -s extglob
+        sudo shopt -s extglob &&
+        sudo shopt extglob &&
         tar -c
         resources/xosc/follow_ghost.xosc
         resources/xosc/cut-in.xosc

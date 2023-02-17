@@ -11,27 +11,19 @@ runs:
       run: lipo -create bin/libesminiRMLib.dylib -output bin/esminiRMLib.bundle
         && lipo -create bin/libesminiLib.dylib -output bin/esminiLib.bundle
 
-    - name: Move one folder back from workspace
-      shell: bash
-      run: cd ${{ github.workspace }}/..
-
     - name: Upload release artifact
       uses: actions/upload-artifact@v3.1.2
       with:
         name: esmini-bin_${{ runner.os }}
         path: |
-          esmini/bin/
-          esmini/EnvironmentSimulator/Applications/odrplot/xodr.py
-          esmini/EnvironmentSimulator/Libraries/esminiRMLib/esminiRMLib.hpp
-          esmini/EnvironmentSimulator/Libraries/esminiRMLib/esminiRMWrapper.cs
-          esmini/EnvironmentSimulator/Libraries/esminiRMLib/esminiRMUnityUtil.cs
-          esmini/EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp 
-          esmini/EnvironmentSimulator/Libraries/esminiLib/ESMiniWrapper.cs
-          esmini/version.txt
-
-    - name: Move back to workspace folder
-      shell: bash
-      run: cd ${{ github.workspace }}
+          ../esmini/bin/
+          ../esmini/EnvironmentSimulator/Applications/odrplot/xodr.py
+          ../esmini/EnvironmentSimulator/Libraries/esminiRMLib/esminiRMLib.hpp
+          ../esmini/EnvironmentSimulator/Libraries/esminiRMLib/esminiRMWrapper.cs
+          ../esmini/EnvironmentSimulator/Libraries/esminiRMLib/esminiRMUnityUtil.cs
+          ../esmini/EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp 
+          ../esmini/EnvironmentSimulator/Libraries/esminiLib/ESMiniWrapper.cs
+          ../esmini/version.txt
 
     - name: Upload demo artifact
       uses: actions/upload-artifact@v3.1.2

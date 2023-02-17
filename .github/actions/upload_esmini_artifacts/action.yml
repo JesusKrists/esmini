@@ -11,6 +11,12 @@ runs:
       run: lipo -create bin/libesminiRMLib.dylib -output bin/esminiRMLib.bundle
         && lipo -create bin/libesminiLib.dylib -output bin/esminiLib.bundle
 
+    - name: Make scripts and binaries runnable - Unix
+      if: runner.os == 'macOS' || runner.os == 'Linux'
+      shell: bash
+      run: sudo chmod -R +x ./run/*
+        && sudo chmod -R +x ./scripts/*
+
     - name: Copy Release artifacts to esmini prefix folder structure
       shell: bash
       run: |
@@ -179,11 +185,11 @@ runs:
         LICENSE \
         release_notes.md \
         version.txt \
-        bin/esmini?(.exe) \
-        bin/odrviewer?(.exe) \
-        bin/replayer?(.exe) \
-        bin/dat2csv?(.exe) \
-        bin/odrplot?(.exe) \
+        bin/esmini?\(.exe\) \
+        bin/odrviewer?\(.exe\) \
+        bin/replayer?\(.exe\) \
+        bin/dat2csv?\(.exe\) \
+        bin/odrplot?\(.exe\) \
         bin/*esminiLib.* \
         EnvironmentSimulator/Applications/odrplot/xodr.py \
         EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp \

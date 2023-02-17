@@ -156,4 +156,4 @@ bin/*esminiLib.* \
 EnvironmentSimulator/Applications/odrplot/xodr.py \
 EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp \
 Hello-World_coding-example/* \
-| tar -C -p esmini-demo -x
+| tar -p -C esmini-demo -x

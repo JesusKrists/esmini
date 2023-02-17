@@ -30,7 +30,7 @@ runs:
         EnvironmentSimulator/Libraries/esminiLib/esminiLib.hpp
         EnvironmentSimulator/Libraries/esminiLib/ESMiniWrapper.cs
         version.txt
-        | tar -C -p esmini -x
+        | tar -p -C esmini -x
 
     - name: Upload release artifact
       uses: actions/upload-artifact@v3.1.2

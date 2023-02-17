@@ -31,7 +31,7 @@ exit_with_msg() {
 export workingDir=$(pwd)
 
 export LSAN_OPTIONS="print_suppressions=false:suppressions="${workingDir}"/scripts/LSAN.supp"
-export ASAN_OPTIONS="detect_invalid_pointer_pairs=1:strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:detect_leaks=1:fast_unwind_on_malloc=0:suppressions="${workingDir}"/scripts/ASAN.supp"
+export ASAN_OPTIONS="detect_invalid_pointer_pairs=1:strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:fast_unwind_on_malloc=0:suppressions="${workingDir}"/scripts/ASAN.supp"
 
 export UNIT_TEST_FOLDER=${workingDir}/build/EnvironmentSimulator/Unittest
 export SMOKE_TEST_FOLDER=${workingDir}/test
@@ -45,6 +45,7 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     export path="../../../bin"
     export EXE_FOLDER="."
     export PYTHON="python3"
+    export ASAN_OPTIONS="$ASAN_OPTIONS:detect_leaks=1"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     export LD_LIBRARY_PATH=${workingDir}"/externals/OSI/mac/lib-dyn"
     export path="../../../bin"

@@ -13,7 +13,7 @@ runs:
 
     - name: Upload release artifact
       uses: actions/upload-artifact@v3.1.2
-      working-directory: ${{ github.workspace }}/..
+      working-directory: ./../
       with:
         name: esmini-bin_${{ runner.os }}
         path: |

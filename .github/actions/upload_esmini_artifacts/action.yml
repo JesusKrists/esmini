@@ -12,7 +12,7 @@ runs:
         && lipo -create bin/libesminiLib.dylib -output bin/esminiLib.bundle
 
     - name: Upload release artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.1.2
       working-directory: ${{ github.workspace }}/..
       with:
         name: esmini-bin_${{ runner.os }}
@@ -27,7 +27,7 @@ runs:
           esmini/version.txt
 
     - name: Upload demo artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: esmini-demo_${{ runner.os }}
         path: |

@@ -123,12 +123,12 @@ jobs:
       - name: CMake Configure - Default
         if: runner.os != 'macOS'
         shell: pwsh
-        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }}
+        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DESMINI_BUILD_VERSION=${{ github.run_number }}
 
       - name: CMake Configure - macOS
         if: runner.os == 'macOS'
         shell: pwsh
-        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DESMINI_BUILD_VERSION=${{ github.run_number }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 
       - name: CMake Build
         run: cmake --build build --config ${{ matrix.configuration }} --target install -j 2
@@ -239,3 +239,71 @@ jobs:
           MESA_GL_VERSION_OVERRIDE: 4.5
         shell: bash
         run: ./scripts/run_tests.sh ${{ matrix.configuration }} true
+
+  release:
+    needs: [test, test-no-external-modules]
+    if: startsWith(github.ref, 'refs/tags/') || contains(github.event.head_commit.message, '#store_bins')
+
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, macos-10.15, windows-2019]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: esmini-bin_${{ runner.os }}
+          path: esmini-bin_${{ runner.os }}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: esmini-demo_${{ runner.os }}
+          path: esmini-demo_${{ runner.os }}
+
+      - name: Make scripts and binaries runnable for Release - Unix
+        if: runner.os == 'macOS' || runner.os == 'Linux'
+        shell: bash
+        run: sudo chmod -R +x ./esmini-bin_${{ runner.os }}/bin/
+
+      - name: Make scripts and binaries runnable for Demo - Unix
+        if: runner.os == 'macOS' || runner.os == 'Linux'
+        shell: bash
+        run: sudo chmod -R +x ./esmini-demo_${{ runner.os }}/run/
+          && sudo chmod -R +x ./esmini-demo_${{ runner.os }}/scripts/
+
+      - name: Display structure of downloaded files - bin
+        shell: bash
+        run: ls -laR esmini-bin_${{ runner.os }}
+
+      - name: Display structure of downloaded files - demo
+        shell: bash
+        run: ls -laR esmini-demo_${{ runner.os }}
+
+      - uses: vimtor/action-zip@v1
+        with:
+          files: esmini-bin_${{ runner.os }}/
+          dest: esmini-bin_${{ runner.os }}.zip
+
+      - uses: vimtor/action-zip@v1
+        with:
+          files: esmini-demo_${{ runner.os }}/
+          dest: esmini-demo_${{ runner.os }}.zip
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: 'esmini ${{ setps.gitversion.outputs.majorMinorPatch }} (build ${{ github.run_number }})'
+          body: 'Demo and binaries. For information about changes and new features see [release notes](https://github.com/esmini/esmini/blob/master/release_notes.md).'
+          files: |
+            esmini-bin_${{ runner.os }}.zip
+            esmini-demo_${{ runner.os }}.zip

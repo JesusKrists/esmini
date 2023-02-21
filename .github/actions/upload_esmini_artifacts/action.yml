@@ -26,11 +26,6 @@ runs:
         version.txt
         | tar -p -C esmini -x
 
-    - name: Make scripts and binaries runnable for Release - Unix
-      if: runner.os == 'macOS' || runner.os == 'Linux'
-      shell: bash
-      run: sudo chmod -R +x ./esmini/bin/
-
     - name: Upload release artifact
       uses: actions/upload-artifact@v3.1.2
       with:
@@ -41,12 +36,6 @@ runs:
       shell: bash
       run: >
         ./scripts/generate_binary_dist.sh
-
-    - name: Make scripts and binaries runnable for Demo - Unix
-      if: runner.os == 'macOS' || runner.os == 'Linux'
-      shell: bash
-      run: sudo chmod -R +x ./esmini-demo/run/
-        && sudo chmod -R +x ./esmini-demo/scripts/
 
     - name: Upload demo artifact
       uses: actions/upload-artifact@v3.1.2

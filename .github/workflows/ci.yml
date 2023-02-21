@@ -302,7 +302,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: 'esmini ${{ setps.gitversion.outputs.majorMinorPatch }} (build ${{ github.run_number }})'
+          name: 'esmini ${{ steps.gitversion.outputs.majorMinorPatch }} (build ${{ github.run_number }})'
           body: 'Demo and binaries. For information about changes and new features see [release notes](https://github.com/esmini/esmini/blob/master/release_notes.md).'
           files: |
             esmini-bin_${{ runner.os }}.zip

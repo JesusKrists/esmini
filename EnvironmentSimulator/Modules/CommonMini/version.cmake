@@ -25,6 +25,7 @@ else()
        exit_code
        EQUAL
        "0")
+        message("git diff exit code: ${exit_code}")
         set(GIT_DIFF
             "+")
     endif()

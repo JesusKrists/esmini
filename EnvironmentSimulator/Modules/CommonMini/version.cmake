@@ -19,13 +19,12 @@ if("${GIT_REV}"
         "N/A")
 else()
     execute_process(
-        COMMAND bash -c "git diff --quiet --exit-code"
+        COMMAND git diff --quiet --exit-code
         RESULT_VARIABLE exit_code)
     if(NOT
        exit_code
        EQUAL
        "0")
-        message("git diff exit code: ${exit_code}")
         set(GIT_DIFF
             "+")
     endif()

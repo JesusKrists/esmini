@@ -80,6 +80,15 @@ jobs:
       #- name: Generate OpenDrive interface
       #  run: python3 main.py generate opendrive
 
+      # Generate build number based on offset from former AppVeyor CI machine
+      - name: Find out build number
+        env:
+          NUM: ${{ github.run_number }}
+          OFFSET: 3138
+        run: |
+            echo "BUILD_NUMBER=$(($NUM+$OFFSET))" >> $GITHUB_ENV
+            echo Build nr: $(($NUM+$OFFSET))
+
       - name: Install clang-tidy-15 - Ubuntu
         if: runner.os == 'Linux'
         env:
@@ -107,12 +116,12 @@ jobs:
       - name: CMake Configure - Default
         if: runner.os != 'macOS'
         shell: pwsh
-        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DESMINI_BUILD_VERSION=${{ github.run_number }}
+        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DESMINI_BUILD_VERSION=${{ env.BUILD_NUMBER }}
 
       - name: CMake Configure - macOS
         if: runner.os == 'macOS'
         shell: pwsh
-        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DESMINI_BUILD_VERSION=${{ github.run_number }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])-test" -DCMAKE_BUILD_TYPE:STRING=${{ matrix.configuration }} -DESMINI_BUILD_VERSION=${{ env.BUILD_NUMBER }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 
       - name: CMake Build
         run: cmake --build build --config ${{ matrix.configuration }} --target install -j 2
@@ -291,7 +300,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: 'esmini ${{ steps.gitversion.outputs.majorMinorPatch }} (build ${{ github.run_number }})'
+          name: 'esmini ${{ steps.gitversion.outputs.majorMinorPatch }} (build ${{ env.BUILD_NUMBER }})'
           body: 'Demo and binaries. For information about changes and new features see [release notes](https://github.com/esmini/esmini/blob/master/release_notes.md).'
           files: |
             esmini-bin_${{ runner.os }}.zip

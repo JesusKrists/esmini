@@ -242,7 +242,7 @@ jobs:
 
   release:
     needs: [test, test-no-external-modules]
-    if: startsWith(github.ref, 'refs/tags/') || contains(github.event.head_commit.message, '#store_bins')
+    if: startsWith(github.ref, 'refs/tags/')
 
     strategy:
       matrix:

@@ -34,7 +34,14 @@ Controller* scenarioengine::InstantiateControllerFollowGhost(void* args)
   return new ControllerFollowGhost(initArgs);
 }
 
-ControllerFollowGhost::ControllerFollowGhost(InitArgs* args) : Controller(args), headstart_time_(3.0), follow_mode_(FollowMode::FOLLOW_MODE_TIME)
+ControllerFollowGhost::ControllerFollowGhost(InitArgs* args)
+    : Controller(args),
+      headstart_time_(3.0),
+      follow_mode_(FollowMode::FOLLOW_MODE_TIME),
+      lookahead_speed_(0.1),
+      min_lookahead_speed_(0.1),
+      lookahead_steering_(1.0),
+      min_lookahead_steering_(1.0)
 {
   if (args->properties->ValueExists("headstartTime"))
   {
@@ -57,6 +64,25 @@ ControllerFollowGhost::ControllerFollowGhost(InitArgs* args) : Controller(args),
       LOG("Unexpected follow mode \"%s\", falling back to default \"time\"", follow_mode.c_str());
       follow_mode_ = FollowMode::FOLLOW_MODE_TIME;
     }
+  }
+  if (args->properties->ValueExists("lookaheadSpeed"))
+  {
+    lookahead_speed_ = strtod(args->properties->GetValueStr("lookaheadSpeed"));
+  }
+
+  if (args->properties->ValueExists("minLookaheadSpeed"))
+  {
+    min_lookahead_speed_ = strtod(args->properties->GetValueStr("minLookaheadSpeed"));
+  }
+
+  if (args->properties->ValueExists("lookaheadSteering"))
+  {
+    lookahead_steering_ = strtod(args->properties->GetValueStr("lookaheadSteering"));
+  }
+
+  if (args->properties->ValueExists("minLookaheadSteering"))
+  {
+    min_lookahead_steering_ = strtod(args->properties->GetValueStr("minLookaheadSteering"));
   }
 }
 
@@ -105,35 +131,54 @@ void ControllerFollowGhost::Step(double timeStep)
 
   // Find out a steering target along ghost vehicle trail
   int                     index_out;
-  roadmanager::TrajVertex point;
+  roadmanager::TrajVertex steering_target_point, speed_point;
 
   // Locate a point at given distance from own vehicle along the ghost trajectory
   int ret_val = 0;
   if (follow_mode_ == FollowMode::FOLLOW_MODE_POSITION)
   {
     // Set steering target point at a distance ahead proportional to the speed
-    double probe_target_distance = MAX(7, 0.5 * object_->speed_);
+    double probe_target_distance = MAX(min_lookahead_speed_, lookahead_speed_ * object_->speed_);
 
     ret_val = object_->GetGhost()->trail_.FindPointAhead(object_->trail_closest_pos_.s,
                                                          probe_target_distance,
-                                                         point,
+                                                         speed_point,
                                                          index_out,
                                                          object_->trail_follow_index_);
+
+    if (ret_val == 0)
+    {
+      probe_target_distance = MAX(min_lookahead_steering_, lookahead_steering_ * object_->speed_);
+
+      ret_val = object_->GetGhost()->trail_.FindPointAhead(object_->trail_closest_pos_.s,
+                                                           probe_target_distance,
+                                                           steering_target_point,
+                                                           index_out,
+                                                           object_->trail_follow_index_);
+    }
   }
   else
   {
-    ret_val = object_->GetGhost()->trail_.FindPointAtTime(currentTime - headstart_time_ + 1.7,  // look ahead 1.7 seconds
-                                                          point,
+    ret_val = object_->GetGhost()->trail_.FindPointAtTime(currentTime - headstart_time_ + MAX(min_lookahead_speed_, lookahead_speed_),
+                                                          speed_point,
                                                           index_out,
                                                           object_->trail_follow_index_);
+
+    if (ret_val == 0)
+    {
+      ret_val = object_->GetGhost()->trail_.FindPointAtTime(currentTime - headstart_time_ + MAX(min_lookahead_steering_, lookahead_steering_),
+                                                            steering_target_point,
+                                                            index_out,
+                                                            object_->trail_follow_index_);
+    }
   }
 
   if (ret_val != 0)
   {
-    point.x     = static_cast<float>(object_->pos_.GetX());
-    point.y     = static_cast<float>(object_->pos_.GetY());
-    point.z     = static_cast<float>(object_->pos_.GetZ());
-    point.speed = 0;
+    steering_target_point.x = static_cast<float>(object_->pos_.GetX());
+    steering_target_point.y = static_cast<float>(object_->pos_.GetY());
+    steering_target_point.z = static_cast<float>(object_->pos_.GetZ());
+    speed_point.speed       = 0;
   }
   else if (follow_mode_ == FollowMode::FOLLOW_MODE_TIME)
   {
@@ -142,11 +187,11 @@ void ControllerFollowGhost::Step(double timeStep)
   }
 
   // Update object sensor position for visualization
-  object_->sensor_pos_[0] = point.x;
-  object_->sensor_pos_[1] = point.y;
-  object_->sensor_pos_[2] = point.z;
+  object_->sensor_pos_[0] = steering_target_point.x;
+  object_->sensor_pos_[1] = steering_target_point.y;
+  object_->sensor_pos_[2] = steering_target_point.z;
 
-  double diffGlobal[2] = {point.x - object_->pos_.GetX(), point.y - object_->pos_.GetY()};
+  double diffGlobal[2] = {steering_target_point.x - object_->pos_.GetX(), steering_target_point.y - object_->pos_.GetY()};
   double len           = sqrt(diffGlobal[0] * diffGlobal[0] + diffGlobal[1] * diffGlobal[1]);
   if (len > SMALL_NUMBER)
   {
@@ -166,7 +211,7 @@ void ControllerFollowGhost::Step(double timeStep)
   double diffH = asin(GetCrossProduct2D(egoDirGlobal[0], egoDirGlobal[1], diffGlobal[0], diffGlobal[1]));
 
   // Update driver model target values
-  vehicle_.DrivingControlTarget(timeStep, point.speed, diffH);
+  vehicle_.DrivingControlTarget(timeStep, speed_point.speed, diffH);
 
   // Register updated vehicle position
 

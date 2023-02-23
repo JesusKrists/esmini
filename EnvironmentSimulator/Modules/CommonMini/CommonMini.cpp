@@ -649,7 +649,7 @@ double SE_getSimTimeStep(__int64& time_stamp, double min_time_step, double max_t
   {
     dt = static_cast<double>(now - time_stamp) * 0.001;  // step size in seconds
 
-    if (dt > max_time_step)  // limit step size
+    if (dt > max_time_step)                              // limit step size
     {
       dt = max_time_step;
     }

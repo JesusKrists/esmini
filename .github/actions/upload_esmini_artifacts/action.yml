@@ -26,19 +26,39 @@ runs:
         version.txt
         | tar -p -C esmini -x
 
+    - name: Make scripts and binaries runnable for Release - Unix
+      if: runner.os == 'macOS' || runner.os == 'Linux'
+      shell: bash
+      run: sudo chmod -R +x ./esmini/bin/
+
+    - name: Archive release binaries
+      shell: bash
+      run: 7z a esmini-bin_${{ runner.os }}.zip esmini/*
+
     - name: Upload release artifact
       uses: actions/upload-artifact@v3.1.2
       with:
         name: esmini-bin_${{ runner.os }}
-        path: esmini
+        path: esmini-bin_${{ runner.os }}.zip
 
     - name: Copy demo artifacts to esmini prefix folder structure
       shell: bash
       run: >
         ./scripts/generate_binary_dist.sh
 
+    - name: Make scripts and binaries runnable for Demo - Unix
+      if: runner.os == 'macOS' || runner.os == 'Linux'
+      shell: bash
+      run: sudo chmod -R +x ./esmini-demo/run/
+        && sudo chmod -R +x ./esmini-demo/scripts/
+        && sudo chmod -R +x ./esmini-demo/bin/
+
+    - name: Archive demo binaries
+      shell: bash
+      run: 7z a esmini-demo_${{ runner.os }}.zip esmini-demo/*
+
     - name: Upload demo artifact
       uses: actions/upload-artifact@v3.1.2
       with:
         name: esmini-demo_${{ runner.os }}
-        path: esmini-demo
+        path: esmini-demo_${{ runner.os }}.zip

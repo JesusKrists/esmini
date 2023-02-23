@@ -62,6 +62,9 @@ jobs:
 
       - uses: ./.github/actions/setup_tools_shared
 
+      # Generate build number based on offset from former AppVeyor CI machine
+      - uses: ./.github/actions/generate_offset_run_number
+
       - name: Cache
         uses: actions/cache@v3.2.5
         with:
@@ -79,15 +82,6 @@ jobs:
 
       #- name: Generate OpenDrive interface
       #  run: python3 main.py generate opendrive
-
-      # Generate build number based on offset from former AppVeyor CI machine
-      - name: Find out build number
-        env:
-          NUM: ${{ github.run_number }}
-          OFFSET: 3138
-        run: |
-            echo "BUILD_NUMBER=$(($NUM+$OFFSET))" >> $GITHUB_ENV
-            echo Build nr: $(($NUM+$OFFSET))
 
       - name: Install clang-tidy-15 - Ubuntu
         if: runner.os == 'Linux'
@@ -249,44 +243,16 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      # Generate build number based on offset from former AppVeyor CI machine
+      - uses: ./.github/actions/generate_offset_run_number
+
       - uses: actions/download-artifact@v3
         with:
           name: esmini-bin_${{ runner.os }}
-          path: esmini-bin_${{ runner.os }}
 
       - uses: actions/download-artifact@v3
         with:
           name: esmini-demo_${{ runner.os }}
-          path: esmini-demo_${{ runner.os }}
-
-      - name: Make scripts and binaries runnable for Release - Unix
-        if: runner.os == 'macOS' || runner.os == 'Linux'
-        shell: bash
-        run: sudo chmod -R +x ./esmini-bin_${{ runner.os }}/bin/
-
-      - name: Make scripts and binaries runnable for Demo - Unix
-        if: runner.os == 'macOS' || runner.os == 'Linux'
-        shell: bash
-        run: sudo chmod -R +x ./esmini-demo_${{ runner.os }}/run/
-          && sudo chmod -R +x ./esmini-demo_${{ runner.os }}/scripts/
-
-      - name: Display structure of downloaded files - bin
-        shell: bash
-        run: ls -laR esmini-bin_${{ runner.os }}
-
-      - name: Display structure of downloaded files - demo
-        shell: bash
-        run: ls -laR esmini-demo_${{ runner.os }}
-
-      - uses: vimtor/action-zip@v1
-        with:
-          files: esmini-bin_${{ runner.os }}/
-          dest: esmini-bin_${{ runner.os }}.zip
-
-      - uses: vimtor/action-zip@v1
-        with:
-          files: esmini-demo_${{ runner.os }}/
-          dest: esmini-demo_${{ runner.os }}.zip
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.7

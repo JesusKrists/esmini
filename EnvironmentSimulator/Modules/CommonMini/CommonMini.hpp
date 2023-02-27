@@ -617,7 +617,7 @@ class SE_Semaphore
     std::unique_lock<std::mutex> lock(mtx);
     if (flag == true)
     {
-       cv.wait(lock);  // wait on the mutex until notify is called
+      cv.wait(lock);  // wait on the mutex until notify is called
     }
 #endif
   }

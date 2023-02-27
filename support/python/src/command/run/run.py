@@ -232,7 +232,7 @@ class Run:  # pylint: disable=too-many-instance-attributes, too-many-public-meth
         files = Run.get_files_for_clang_format(includes, excludes)
 
         for file in files:
-            os.system("clang-format-14 -style=file -i " + file)
+            os.system("clang-format-15 -style=file -i " + file)
             if not silent_mode:
                 print(
                     formatter.format_green("Formatted: ")
@@ -258,7 +258,7 @@ class Run:  # pylint: disable=too-many-instance-attributes, too-many-public-meth
         counter = 0
         for file in files:
             stdout, stderr = subprocess_popen(
-                ["clang-format-14", "--dry-run", "-style=file", "-i", file]
+                ["clang-format-15", "--dry-run", "-style=file", "-i", file]
             )
 
             if len(stdout) == 0 and len(stderr) == 0:
